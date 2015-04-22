@@ -1,2 +1,2 @@
 # production-capacity
-ProductionCapacity
+ProductionCapacity - Java Swing application for business consultants working on EU's Entrepreneurship and Innovation Programme's procedure "Improving production capacity of micro, small and medium-sized enterprises"
