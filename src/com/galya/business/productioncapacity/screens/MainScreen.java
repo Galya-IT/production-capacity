@@ -1,16 +1,17 @@
 package com.galya.business.productioncapacity.screens;
 
 import java.awt.BorderLayout;
-import java.awt.Component;
+import java.awt.event.ActionListener;
 
-import javax.swing.ImageIcon;
-import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JMenuBar;
-import javax.swing.JTextField;
 
-import com.galya.business.productioncapacity.components.MainMenu;
 import com.galya.business.productioncapacity.components.MainTabbedPane;
+import com.galya.business.productioncapacity.components.TabsContainer;
+import com.galya.business.productioncapacity.components.menu.MainMenuBar;
+import com.galya.business.productioncapacity.components.tabs.NewClientTab;
+import com.galya.business.productioncapacity.components.tabs.Tab;
+import com.galya.business.productioncapacity.components.tabs.TestTab;
 import com.galya.business.productioncapacity.utils.GuiUtils;
 
 public class MainScreen implements Screen, TabsContainer {
@@ -18,28 +19,16 @@ public class MainScreen implements Screen, TabsContainer {
     private JMenuBar menuBar;
     private MainTabbedPane mainTabbedPane;
 
-    public MainScreen(JFrame frame) {
-        menuBar = new MainMenu();
+    public MainScreen(JFrame frame, ActionListener mainMenuActionListener) {
+        menuBar = new MainMenuBar(mainMenuActionListener);
         frame.setJMenuBar(menuBar);
 
         mainTabbedPane = new MainTabbedPane();
 
-        // To remove: START
-        
-        final int TAB_LABEL_WIDTH = 100;
+        addNewTab(new TestTab());
+        addNewTab(new NewClientTab());
 
-        JTextField textFieldComponent = new JTextField();
-        textFieldComponent.setColumns(3);
-
-        addNewTab("Tab 10 fdgdfbdfb df ergerg rgherhrthrtfhb rthrthrth", null, TAB_LABEL_WIDTH, textFieldComponent,
-                false);
-        addNewTab("Tab 2", null, TAB_LABEL_WIDTH, null, true);
-        addNewTab("Tab 3", null, TAB_LABEL_WIDTH, null, true);
-        addNewTab("Tab 4", null, TAB_LABEL_WIDTH, null, true);
-        
-        // To remove: END
-        
-        frame.add(mainTabbedPane, BorderLayout.CENTER);
+        frame.add(mainTabbedPane, BorderLayout.NORTH);
     }
 
     @Override
@@ -62,12 +51,11 @@ public class MainScreen implements Screen, TabsContainer {
     }
 
     @Override
-    public JComponent addNewTab(String labelText, ImageIcon icon, int preferredWidth, Component component,
-            boolean isCloseable) {
-        return mainTabbedPane.addNewTab(labelText, icon, preferredWidth, component, isCloseable);
+    public void addNewTab(Tab tab) {
+        mainTabbedPane.addNewTab(tab);
     }
-    
+
     public void addTabNewBusiness() {
-        
+
     }
 }

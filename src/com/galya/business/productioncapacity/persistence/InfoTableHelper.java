@@ -1,5 +1,7 @@
 package com.galya.business.productioncapacity.persistence;
 
+import static com.galya.business.productioncapacity.persistence.ProductionCapacityDatabaseManager.VARCHAR_MAX_LENGTH;
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -24,8 +26,8 @@ public class InfoTableHelper implements TableHelper {
 
     private static final String SYSTEM_INFO_TABLE_CREATION_QUERY = "CREATE TABLE IF NOT EXISTS " + SYSTEM_INFO_TABLE
             + " (" + SYSTEM_INFO_TABLE_ID + " integer primary key autoincrement, " + SYSTEM_INFO_TABLE_KEY
-            + " varchar(" + ProductionCapacityDatabaseManager.VARCHAR_MAX_LENGTH + ") unique not null, " + SYSTEM_INFO_TABLE_VALUE + " varchar("
-            + ProductionCapacityDatabaseManager.VARCHAR_MAX_LENGTH + ") not null" + ");";
+            + " varchar(" + VARCHAR_MAX_LENGTH + ") unique not null, " + SYSTEM_INFO_TABLE_VALUE + " varchar("
+            + VARCHAR_MAX_LENGTH + ") not null" + ");";
 
     private static InfoTableHelper instance;
 
@@ -43,12 +45,12 @@ public class InfoTableHelper implements TableHelper {
     public String getDatabaseName() {
         return DATABASE_NAME;
     }
-    
+
     @Override
     public String getTableName() {
         return SYSTEM_INFO_TABLE;
     }
-    
+
     @Override
     public void createTable(Connection connection) throws SQLException {
         Statement stmt = connection.createStatement();
@@ -92,22 +94,22 @@ public class InfoTableHelper implements TableHelper {
 
     public boolean areValidCredentials(String username, String pass) {
         boolean areValidCredentials = false;
-        
+
         try (Connection connection = ProductionCapacityDatabaseManager.getConnection();) {
-            PreparedStatement stmt = connection.prepareStatement("SELECT * " + " FROM "
-                    + SYSTEM_INFO_TABLE + " WHERE " + SYSTEM_INFO_TABLE_KEY + "=? AND " + SYSTEM_INFO_TABLE_VALUE + "=?");
+            PreparedStatement stmt = connection.prepareStatement("SELECT * " + " FROM " + SYSTEM_INFO_TABLE + " WHERE "
+                    + SYSTEM_INFO_TABLE_KEY + "=? AND " + SYSTEM_INFO_TABLE_VALUE + "=?");
             stmt.setString(1, username);
             stmt.setString(2, pass);
-            
+
             ResultSet rs = stmt.executeQuery();
             areValidCredentials = rs.next();
-            
+
             rs.close();
             stmt.close();
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        
+
         return areValidCredentials;
     }
 
@@ -127,7 +129,7 @@ public class InfoTableHelper implements TableHelper {
         stmt.executeUpdate();
         stmt.close();
     }
-    
+
     private void updateValue(Connection connection, String key, String value) throws SQLException {
         PreparedStatement stmt = connection.prepareStatement("UPDATE " + SYSTEM_INFO_TABLE + " SET "
                 + SYSTEM_INFO_TABLE_VALUE + "=? " + " WHERE " + SYSTEM_INFO_TABLE_KEY + "=?");

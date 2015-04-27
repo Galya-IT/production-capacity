@@ -18,11 +18,16 @@ public class ProductionCapacityDatabaseManager {
 
     public static void initDatabase() {
         tableHelpers.add(InfoTableHelper.getInstance());
+        tableHelpers.add(EconomicActivitySectionTableHelper.getInstance());
+        tableHelpers.add(EconomicActivityDivisionTableHelper.getInstance());
+        tableHelpers.add(EconomicActivityGroupTableHelper.getInstance());
+        tableHelpers.add(EconomicActivityClassTableHelper.getInstance());
+        tableHelpers.add(AdministrativeRuralAreasTableHelper.getInstance());
 
         //dropAllTables();
         //createAllTables();
         //populateAllTables();
-        
+
         for (TableHelper tableHelper : tableHelpers) {
             if (!isTableExisting(tableHelper.getTableName())) {
                 try (Connection connection = getConnection();) {

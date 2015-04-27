@@ -16,6 +16,7 @@ import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
@@ -108,21 +109,13 @@ public class LoginDialog extends JDialog {
         labelPane.setBackground(VIOLET);
         labelPane.setEditable(false);
 
-        JTextField usernameLabel = new JTextField("Username:");
-        usernameLabel.setEditable(false);
-        usernameLabel.setBorder(null);
-        usernameLabel.setHorizontalAlignment(JTextField.RIGHT);
-        usernameLabel.setFont(DIALOG_DEFAULT_FONT);
+        JLabel usernameLabel = generateLabel("Username:");
 
         usernameField = new JTextField();
         usernameField.setMargin(new Insets(5, 5, 5, 5));
         usernameField.setFont(DIALOG_DEFAULT_FONT);
 
-        JTextField passwordLabel = new JTextField("Password:");
-        passwordLabel.setEditable(false);
-        passwordLabel.setBorder(null);
-        passwordLabel.setHorizontalAlignment(JTextField.RIGHT);
-        passwordLabel.setFont(DIALOG_DEFAULT_FONT);
+        JLabel passwordLabel = generateLabel("Password:");
 
         passwordField = new JPasswordField();
         passwordField.setMargin(new Insets(5, 5, 5, 5));
@@ -227,6 +220,14 @@ public class LoginDialog extends JDialog {
         add(container);
     }
     
+    private JLabel generateLabel(String labelText) {
+        JLabel label = new JLabel(labelText);
+        label.setBorder(null);
+        label.setHorizontalAlignment(JTextField.RIGHT);
+        label.setFont(DIALOG_DEFAULT_FONT);
+        return label;
+    }
+
     private void clearInputFields() {
         usernameField.setText("");
         passwordField.setText("");
