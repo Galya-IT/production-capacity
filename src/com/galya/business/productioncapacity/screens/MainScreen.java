@@ -25,8 +25,8 @@ public class MainScreen implements Screen, TabsContainer {
 
         mainTabbedPane = new MainTabbedPane();
 
-        addNewTab(new TestTab());
-        addNewTab(new NewClientTab());
+        addNewTab(new TestTab(frame));
+        addNewTab(new NewClientTab(frame));
 
         frame.add(mainTabbedPane, BorderLayout.NORTH);
     }

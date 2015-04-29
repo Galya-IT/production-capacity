@@ -27,6 +27,8 @@ import com.galya.business.productioncapacity.ProductionCapacity;
 import com.galya.business.productioncapacity.persistence.InfoTableHelper;
 import com.galya.business.productioncapacity.utils.GuiUtils;
 
+import static com.galya.business.productioncapacity.utils.ComponentFactory.*;
+
 public class LoginDialog extends JDialog {
 
     private static final long serialVersionUID = -1414634241243336634L;
@@ -109,13 +111,13 @@ public class LoginDialog extends JDialog {
         labelPane.setBackground(VIOLET);
         labelPane.setEditable(false);
 
-        JLabel usernameLabel = generateLabel("Username:");
+        JLabel usernameLabel = generateLabel("Username:", DIALOG_DEFAULT_FONT);
 
         usernameField = new JTextField();
         usernameField.setMargin(new Insets(5, 5, 5, 5));
         usernameField.setFont(DIALOG_DEFAULT_FONT);
 
-        JLabel passwordLabel = generateLabel("Password:");
+        JLabel passwordLabel = generateLabel("Password:", DIALOG_DEFAULT_FONT);
 
         passwordField = new JPasswordField();
         passwordField.setMargin(new Insets(5, 5, 5, 5));
@@ -218,14 +220,6 @@ public class LoginDialog extends JDialog {
         container.add(buttonLogin, constraints);
 
         add(container);
-    }
-    
-    private JLabel generateLabel(String labelText) {
-        JLabel label = new JLabel(labelText);
-        label.setBorder(null);
-        label.setHorizontalAlignment(JTextField.RIGHT);
-        label.setFont(DIALOG_DEFAULT_FONT);
-        return label;
     }
 
     private void clearInputFields() {

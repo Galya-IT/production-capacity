@@ -3,6 +3,7 @@ package com.galya.business.productioncapacity.components.tabs;
 import java.awt.GridLayout;
 
 import javax.swing.ImageIcon;
+import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
@@ -13,8 +14,8 @@ public class TestTab extends Tab {
     private static final ImageIcon ICON = null;
     private static final boolean IS_CLOSEABLE = false;
 
-    public TestTab() {
-        super(LABEL, LABEL_WIDTH, ICON, IS_CLOSEABLE);
+    public TestTab(JFrame parentFrame) {
+        super(parentFrame, LABEL, LABEL_WIDTH, ICON, IS_CLOSEABLE);
 
         JPanel panel = new JPanel(false);
         panel.setLayout(new GridLayout(1, 1));

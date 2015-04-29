@@ -140,10 +140,10 @@ public class ProductionCapacity {
         public void actionPerformed(ActionEvent event) {
             switch (event.getActionCommand()) {
                 case FileMenu.MENU_ITEM_NEW_CLIENT:
-                    mainScreen.addNewTab(new NewClientTab());
+                    mainScreen.addNewTab(new NewClientTab(mainFrame));
                     break;
                 case FileMenu.MENU_ITEM_SEARCH:
-                    mainScreen.addNewTab(new SearchTab());
+                    mainScreen.addNewTab(new SearchTab(mainFrame));
                     break;
                 case FileMenu.MENU_ITEM_LOGOUT:
                     InfoTableHelper.getInstance().setAutoLogin(false);
