@@ -1,4 +1,4 @@
-package com.galya.business.productioncapacity.components;
+package com.galya.business.productioncapacity.components.misc;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -16,9 +16,9 @@ public class DatePickerFactory {
     public static JDatePickerImpl generateDatePickerBg() {
         UtilDateModel model = new UtilDateModel();
         Properties properties = new Properties();
-        properties.put("text.today", "Днес");
-        properties.put("text.month", "Месец");
-        properties.put("text.year", "Година");
+        properties.put("text.today", "Today");
+        properties.put("text.month", "Month");
+        properties.put("text.year", "Year");
         JDatePanelImpl datePanel = new JDatePanelImpl(model, properties);
         
         AbstractFormatter formatter = new AbstractFormatter() {

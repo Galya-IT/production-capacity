@@ -16,6 +16,7 @@ public class AdministrativeAreaComboBox extends JComboBox<String> {
     private static final long serialVersionUID = 508618837605651632L;
 
     private static final int MAX_COMBO_BOX_OPTIONS = 10;
+    private static final String DEFAULT_OPTION = "------- Избери от списъка -------";
 
     private CustomComboBoxModel model;
 
@@ -47,11 +48,25 @@ public class AdministrativeAreaComboBox extends JComboBox<String> {
         setSelectedIndex(0);
     }
 
+    public String getDefaultOption() {
+        return DEFAULT_OPTION;
+    }
+    
+    public String getSelectedItemIfDifferentFromDefault() {
+        String result = null;
+        Object selectedItem = getModel().getSelectedItem();
+        if (selectedItem != null) {
+            String selectedValue = (String) selectedItem;
+            if (!DEFAULT_OPTION.equals(selectedValue)) {
+                result = selectedValue;
+            }
+        }
+        return result;
+    }
+
     private class CustomComboBoxModel extends AbstractListModel<String> implements ComboBoxModel<String> {
 
         private static final long serialVersionUID = -257579925225294669L;
-
-        private static final String DEFAULT_OPTION = "------- Избери от списъка -------";
 
         private List<String> areas;
         private String selection;

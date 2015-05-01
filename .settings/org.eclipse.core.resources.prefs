@@ -1,10 +1,12 @@
 eclipse.preferences.version=1
 encoding//src/com/galya/business/productioncapacity/ProductionCapacity.java=UTF-8
 encoding//src/com/galya/business/productioncapacity/components/AdministrativeAreaComboBox.java=UTF-8
-encoding//src/com/galya/business/productioncapacity/components/DatePickerFactory.java=UTF-8
 encoding//src/com/galya/business/productioncapacity/components/EconomicActivityComboBox.java=UTF-8
+encoding//src/com/galya/business/productioncapacity/components/FinancialReportsModule.java=UTF-8
 encoding//src/com/galya/business/productioncapacity/components/LoginDialog.java=UTF-8
-encoding//src/com/galya/business/productioncapacity/components/tabs/NewClientTab.java=UTF-8
+encoding//src/com/galya/business/productioncapacity/components/misc/DatePickerFactory.java=UTF-8
+encoding//src/com/galya/business/productioncapacity/components/tabs/ClientTab.java=UTF-8
+encoding//src/com/galya/business/productioncapacity/model/CompanyCategory.java=UTF-8
 encoding//src/com/galya/business/productioncapacity/persistence/AdministrativeRuralAreasTableHelper.java=UTF-8
 encoding//src/com/galya/business/productioncapacity/persistence/EconomicActivityClassTableHelper.java=UTF-8
 encoding//src/com/galya/business/productioncapacity/persistence/EconomicActivityDivisionTableHelper.java=UTF-8

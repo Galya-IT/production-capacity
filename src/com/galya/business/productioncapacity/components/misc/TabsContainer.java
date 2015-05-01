@@ -1,4 +1,4 @@
-package com.galya.business.productioncapacity.components;
+package com.galya.business.productioncapacity.components.misc;
 
 import com.galya.business.productioncapacity.components.tabs.Tab;
 

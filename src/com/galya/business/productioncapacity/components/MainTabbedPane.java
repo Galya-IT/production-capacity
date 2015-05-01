@@ -9,6 +9,7 @@ import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JTabbedPane;
 
+import com.galya.business.productioncapacity.components.misc.TabsContainer;
 import com.galya.business.productioncapacity.components.tabs.Tab;
 
 public class MainTabbedPane extends JTabbedPane implements TabsContainer {

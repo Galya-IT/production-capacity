@@ -20,7 +20,7 @@ import javax.swing.ToolTipManager;
 import javax.swing.UIManager;
 
 import com.galya.business.productioncapacity.components.menu.FileMenu;
-import com.galya.business.productioncapacity.components.tabs.NewClientTab;
+import com.galya.business.productioncapacity.components.tabs.ClientTab;
 import com.galya.business.productioncapacity.components.tabs.SearchTab;
 import com.galya.business.productioncapacity.persistence.InfoTableHelper;
 import com.galya.business.productioncapacity.persistence.ProductionCapacityDatabaseManager;
@@ -140,7 +140,7 @@ public class ProductionCapacity {
         public void actionPerformed(ActionEvent event) {
             switch (event.getActionCommand()) {
                 case FileMenu.MENU_ITEM_NEW_CLIENT:
-                    mainScreen.addNewTab(new NewClientTab(mainFrame));
+                    mainScreen.addNewTab(new ClientTab(mainFrame, null));
                     break;
                 case FileMenu.MENU_ITEM_SEARCH:
                     mainScreen.addNewTab(new SearchTab(mainFrame));

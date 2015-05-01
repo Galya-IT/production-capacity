@@ -14,6 +14,8 @@ public abstract class Tab {
 
     private static final String CONFIRM_CLOSE_DIALOG_TITLE = "Close Tab";
 
+    private static final double TAB_HEIGHT_PERCENTAGE_OF_SCREEN = 0.85;
+
     private String label;
     private ImageIcon icon;
     private boolean isCloseable;
@@ -87,7 +89,7 @@ public abstract class Tab {
         scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
         scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
         int preferedWidth = preferedTabDimension.width;
-        int preferedHeight = (int)(0.9 * preferedTabDimension.height);
+        int preferedHeight = (int)(TAB_HEIGHT_PERCENTAGE_OF_SCREEN * preferedTabDimension.height);
         scrollPane.setPreferredSize(new Dimension(preferedWidth, preferedHeight));
         scrollPane.setBorder(null);
         scrollPane.setViewportView(component);

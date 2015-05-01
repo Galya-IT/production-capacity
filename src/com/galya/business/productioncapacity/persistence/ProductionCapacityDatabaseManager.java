@@ -23,6 +23,8 @@ public class ProductionCapacityDatabaseManager {
         tableHelpers.add(EconomicActivityGroupTableHelper.getInstance());
         tableHelpers.add(EconomicActivityClassTableHelper.getInstance());
         tableHelpers.add(AdministrativeRuralAreasTableHelper.getInstance());
+        tableHelpers.add(ClientTableHelper.getInstance());
+        tableHelpers.add(FinancialReportTableHelper.getInstance());
 
         //dropAllTables();
         //createAllTables();

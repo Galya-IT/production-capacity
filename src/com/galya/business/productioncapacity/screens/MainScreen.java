@@ -7,9 +7,9 @@ import javax.swing.JFrame;
 import javax.swing.JMenuBar;
 
 import com.galya.business.productioncapacity.components.MainTabbedPane;
-import com.galya.business.productioncapacity.components.TabsContainer;
 import com.galya.business.productioncapacity.components.menu.MainMenuBar;
-import com.galya.business.productioncapacity.components.tabs.NewClientTab;
+import com.galya.business.productioncapacity.components.misc.TabsContainer;
+import com.galya.business.productioncapacity.components.tabs.ClientTab;
 import com.galya.business.productioncapacity.components.tabs.Tab;
 import com.galya.business.productioncapacity.components.tabs.TestTab;
 import com.galya.business.productioncapacity.utils.GuiUtils;
@@ -26,7 +26,7 @@ public class MainScreen implements Screen, TabsContainer {
         mainTabbedPane = new MainTabbedPane();
 
         addNewTab(new TestTab(frame));
-        addNewTab(new NewClientTab(frame));
+        addNewTab(new ClientTab(frame, null));
 
         frame.add(mainTabbedPane, BorderLayout.NORTH);
     }
