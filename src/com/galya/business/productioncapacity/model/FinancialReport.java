@@ -2,7 +2,7 @@ package com.galya.business.productioncapacity.model;
 
 public class FinancialReport {
 
-    private long companyId;
+    private long id;
     private int year;
     private double assetsSum;
     private double netProfit;
@@ -16,13 +16,12 @@ public class FinancialReport {
     private double investmentsEquipment;
     private double earningsExportTolling;
     
-    public FinancialReport (long companyId, int year) {
-        this.companyId = companyId;
+    public FinancialReport (int year) {
         this.year = year;
     }
     
-    public FinancialReport (long companyId, int year, double assetsSum, double netProfit, double equity, double liabilitiesProvisions, double netSales, double incomeOperatingActivities, double outlayOperatingActivities, double amortization, double avgStaffNumber, double investmentsEquipment, double earningsExportTolling) {
-        this(companyId, year);
+    public FinancialReport (int year, double assetsSum, double netProfit, double equity, double liabilitiesProvisions, double netSales, double incomeOperatingActivities, double outlayOperatingActivities, double amortization, double avgStaffNumber, double investmentsEquipment, double earningsExportTolling) {
+        this(year);
         this.assetsSum = assetsSum;
         this.netProfit = netProfit;
         this.equity = equity;
@@ -35,9 +34,9 @@ public class FinancialReport {
         this.investmentsEquipment = investmentsEquipment;
         this.earningsExportTolling = earningsExportTolling;
     }
-    
-    public long getCompanyId() {
-        return companyId;
+
+    public long getId() {
+        return id;
     }
 
     public int getYear() {
@@ -88,6 +87,10 @@ public class FinancialReport {
         return earningsExportTolling;
     }
 
+    public void setId(long id) {
+        this.id = id;
+    }
+    
     public void setAssetsSum(double assetsSum) {
         this.assetsSum = assetsSum;
     }

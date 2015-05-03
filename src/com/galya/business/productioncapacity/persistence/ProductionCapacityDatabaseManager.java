@@ -47,6 +47,7 @@ public class ProductionCapacityDatabaseManager {
         try {
             Class.forName("org.sqlite.JDBC");
             connection = DriverManager.getConnection("jdbc:sqlite:" + DATABASE_NAME);
+            //connection = new net.sf.log4jdbc.ConnectionSpy(connection);
         } catch (Exception e) {
             e.printStackTrace();
         }

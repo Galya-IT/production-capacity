@@ -19,6 +19,8 @@ import javax.swing.JOptionPane;
 import javax.swing.ToolTipManager;
 import javax.swing.UIManager;
 
+import org.apache.log4j.BasicConfigurator;
+
 import com.galya.business.productioncapacity.components.menu.FileMenu;
 import com.galya.business.productioncapacity.components.tabs.ClientTab;
 import com.galya.business.productioncapacity.components.tabs.SearchTab;
@@ -70,6 +72,7 @@ public class ProductionCapacity {
     }
 
     private static void initApp() {
+        BasicConfigurator.configure();
         ProductionCapacityDatabaseManager.initDatabase();
         app = new ProductionCapacity();
 

@@ -220,8 +220,8 @@ public class FinancialReportsModule {
         layoutBuffer.add(earningsExportTollingLastYear, COLUMN.DATA_THREE, 1);
     }
 
-    public FinancialReport getReportLastYear(long clientId) {
-        FinancialReport lastYearReport = new FinancialReport(clientId, Integer.parseInt(lastYearLabel.getText()));
+    public FinancialReport getReportLastYear() {
+        FinancialReport lastYearReport = new FinancialReport(Integer.parseInt(lastYearLabel.getText()));
         lastYearReport.setAssetsSum(Double.parseDouble(assetsSumLastYear.getText()));
         lastYearReport.setNetProfit(Double.parseDouble(netProfitLastYear.getText()));
         lastYearReport.setEquity(Double.parseDouble(equityLastYear.getText()));
@@ -236,8 +236,8 @@ public class FinancialReportsModule {
         return lastYearReport;
     }
 
-    public FinancialReport getReporTwoYearsBack(long clientId) {
-        FinancialReport twoYearsBackReport = new FinancialReport(clientId, Integer.parseInt(twoYearsBackYearLabel
+    public FinancialReport getReportTwoYearsBack() {
+        FinancialReport twoYearsBackReport = new FinancialReport(Integer.parseInt(twoYearsBackYearLabel
                 .getText()));
         twoYearsBackReport.setAssetsSum(Double.parseDouble(assetsSumTwoYearsAgo.getText()));
         twoYearsBackReport.setNetProfit(Double.parseDouble(netProfitTwoYearsAgo.getText()));
@@ -255,9 +255,8 @@ public class FinancialReportsModule {
         return twoYearsBackReport;
     }
 
-    public FinancialReport getReporThreeYearsBack(long clientId) {
-        FinancialReport threeYearsBackReport = new FinancialReport(clientId,
-                Integer.parseInt((String) threeYearsBackYearComboBox.getSelectedItem()));
+    public FinancialReport getReportThreeYearsBack() {
+        FinancialReport threeYearsBackReport = new FinancialReport((int) threeYearsBackYearComboBox.getSelectedItem());
         threeYearsBackReport.setAssetsSum(Double.parseDouble(assetsSumThreeYearsAgo.getText()));
         threeYearsBackReport.setNetProfit(Double.parseDouble(netProfitThreeYearsAgo.getText()));
         threeYearsBackReport.setEquity(Double.parseDouble(equityThreeYearsAgo.getText()));
@@ -274,9 +273,16 @@ public class FinancialReportsModule {
         return threeYearsBackReport;
     }
 
+    @SuppressWarnings({ "serial" })
     public void registerListener(FinancialReportsModuleEventListener listener, FinancialReportsModuleEventType eventType) {
-/*        HashSet listenersSet = eventTypeEventListenersPairs.get(eventType);
-        listenersSet.add(listener);*/
+       HashSet<FinancialReportsModuleEventListener> listenersSet = eventTypeEventListenersPairs.get(eventType);
+       if (listenersSet == null) {
+           eventTypeEventListenersPairs.put(eventType, new HashSet<FinancialReportsModuleEventListener>() {{
+               add(listener);
+           }});
+       } else {
+           listenersSet.add(listener);
+       }
     }
 
     private void emitEvent(FinancialReportsModuleEventType eventType) {

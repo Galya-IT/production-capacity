@@ -48,6 +48,7 @@ import com.galya.business.productioncapacity.persistence.EconomicActivityClassTa
 import com.galya.business.productioncapacity.persistence.EconomicActivityDivisionTableHelper;
 import com.galya.business.productioncapacity.persistence.EconomicActivityGroupTableHelper;
 import com.galya.business.productioncapacity.persistence.EconomicActivitySectionTableHelper;
+import com.galya.business.productioncapacity.persistence.FinancialReportTableHelper;
 import com.galya.business.productioncapacity.utils.CommonUtils;
 import com.galya.business.productioncapacity.utils.FileSystemUtils;
 import com.galya.business.productioncapacity.utils.GuiUtils;
@@ -68,6 +69,7 @@ public class ClientTab extends Tab implements FinancialReportsModuleEventListene
     private static final boolean IS_CLOSEABLE = true;
 
     private boolean isOldClient = false;
+    private Client oldClient;
 
     private JPanel mainPanel;
 
@@ -284,11 +286,11 @@ public class ClientTab extends Tab implements FinancialReportsModuleEventListene
     @Override
     public void handleFinancialReportEvent(FinancialReportsModuleEventType eventType) {
         if (eventType == FinancialReportsModuleEventType.NET_SALES_CHANGED) {
-            
+
             double netSalesThreeYearsAgoDouble = financialReportsModule.getNetSalesThreeYearsAgo();
             double netSalesTwoYearsAgoDouble = financialReportsModule.getNetSalesTwoYearsAgo();
             double netSalesLastYearDouble = financialReportsModule.getNetSalesLastYear();
-            
+
             // TODO: if (all 3 != 0) ???
             if (netSalesThreeYearsAgoDouble != FinancialReportsModule.INVALID_VALUE
                     && netSalesTwoYearsAgoDouble != FinancialReportsModule.INVALID_VALUE
@@ -296,7 +298,7 @@ public class ClientTab extends Tab implements FinancialReportsModuleEventListene
 
                 double netSalesThreeYears = netSalesThreeYearsAgoDouble + netSalesTwoYearsAgoDouble
                         + netSalesLastYearDouble;
-                
+
                 CompanyCategory category = null;
                 if (netSalesThreeYears > 0) {
                     category = CompanyCategory.getByNetSales(netSalesThreeYears);
@@ -575,17 +577,74 @@ public class ClientTab extends Tab implements FinancialReportsModuleEventListene
             return;
         }
 
-        Client currentClient = new Client(companyName, bulstat, seatAddress, economicActivitySection,
-                economicActivityDivision, economicActivityGroup, economicActivityClass, investmentRegion,
-                investmentDistrict, investmentMunicipality, investmentAddress, firstDocumentsReceptionDate,
-                lastDocumentsReceptionDate, notes, category, wholeInvestitionAmountString, standardsString,
-                softwareSystemsString, otherCompaniesConnectionsString);
+        FinancialReportTableHelper financialReportTableHelper = FinancialReportTableHelper.getInstance();
 
-        long clientId = ClientTableHelper.getInstance().addClient(currentClient);
+        FinancialReport lastYearReport = financialReportsModule.getReportLastYear();
+        FinancialReport twoYearsBackReport = financialReportsModule.getReportTwoYearsBack();
+        FinancialReport threeYearsBackReport = financialReportsModule.getReportThreeYearsBack();
+        
+        if (!isOldClient) {
+            Client newClient = new Client(companyName, bulstat, seatAddress, economicActivitySection,
+                    economicActivityDivision, economicActivityGroup, economicActivityClass, investmentRegion,
+                    investmentDistrict, investmentMunicipality, investmentAddress, firstDocumentsReceptionDate,
+                    lastDocumentsReceptionDate, notes, category, wholeInvestitionAmountString, standardsString,
+                    softwareSystemsString, otherCompaniesConnectionsString);
 
-        FinancialReport lastYearReport = financialReportsModule.getReportLastYear(clientId);
-        FinancialReport twoYearsBackReport = financialReportsModule.getReporTwoYearsBack(clientId);
-        FinancialReport threeYearsBackReport = financialReportsModule.getReporThreeYearsBack(clientId);
+            long clientId = ClientTableHelper.getInstance().addClient(newClient);
+            newClient.setId(clientId);
+            
+            long lastYearReportId = financialReportTableHelper.addReport(clientId, lastYearReport);
+            lastYearReport.setId(lastYearReportId);
+            newClient.setLastYearReport(lastYearReport);
+            
+            long twoYearsBackReportId = financialReportTableHelper.addReport(clientId, twoYearsBackReport);
+            twoYearsBackReport.setId(twoYearsBackReportId);
+            newClient.setTwoYearsBackReport(twoYearsBackReport);
+            
+            long threeYearsBackReportId = financialReportTableHelper.addReport(clientId, threeYearsBackReport);
+            threeYearsBackReport.setId(threeYearsBackReportId);
+            newClient.setThreeYearsBackReport(threeYearsBackReport);
+            
+            oldClient = newClient;
+            isOldClient = true;
+            setLabel(oldClient.getName());
+        } else {
+            if (!companyName.equals(oldClient.getName())) {
+                oldClient.setName(companyName);
+                setLabel(companyName);
+            }
+            oldClient.setBulstat(bulstat);
+            oldClient.setSeatAddress(seatAddress);
+            oldClient.setEconomicActivitySection(economicActivitySection);
+            oldClient.setEconomicActivityDivision(economicActivityDivision);
+            oldClient.setEconomicActivityGroup(economicActivityGroup);
+            oldClient.setEconomicActivityClass(economicActivityClass);
+            oldClient.setInvestmentRegion(investmentRegion);
+            oldClient.setInvestmentDistrict(investmentDistrict);
+            oldClient.setInvestmentMunicipality(investmentMunicipality);
+            oldClient.setInvestmentAddress(investmentAddress);
+            oldClient.setFirstDocumentsReceptionDate(firstDocumentsReceptionDate);
+            oldClient.setLastDocumentsReceptionDate(lastDocumentsReceptionDate);
+            oldClient.setNotes(notes);
+            oldClient.setCategory(category);
+            oldClient.setWholeInvestitionAmount(wholeInvestitionAmountString);
+            oldClient.setStandards(standardsString);
+            oldClient.setSoftwareSystems(softwareSystemsString);
+            oldClient.setOtherCompaniesConnections(otherCompaniesConnectionsString);
+
+            lastYearReport.setId(oldClient.getLastYearReport().getId());
+            twoYearsBackReport.setId(oldClient.getTwoYearsBackReport().getId());
+            threeYearsBackReport.setId(oldClient.getThreeYearsBackReport().getId());
+            
+            oldClient.setLastYearReport(lastYearReport);
+            oldClient.setTwoYearsBackReport(twoYearsBackReport);
+            oldClient.setThreeYearsBackReport(threeYearsBackReport);
+            
+            ClientTableHelper.getInstance().updateClient(oldClient);
+            financialReportTableHelper.updateReport(oldClient.getId(), lastYearReport);
+            financialReportTableHelper.updateReport(oldClient.getId(), twoYearsBackReport);
+            financialReportTableHelper.updateReport(oldClient.getId(), threeYearsBackReport);
+        }
 
         /*Set<File> files = new HashSet<File>();
         currentClient.setFiles(files);*/

@@ -7,7 +7,7 @@ import java.util.Set;
 
 public class Client {
 
-    private int id;
+    private long id;
     private String name;
     private String bulstat;
     private String seatAddress;
@@ -73,7 +73,7 @@ public class Client {
         this.otherCompaniesConnections = otherCompaniesConnections;
     }
 
-    public int getId() {
+    public long getId() {
         return id;
     }
 
@@ -181,7 +181,7 @@ public class Client {
         return files;
     }
 
-    public void setId(int id) {
+    public void setId(long id) {
         this.id = id;
     }
 

@@ -11,6 +11,7 @@ import javax.swing.JTabbedPane;
 
 import com.galya.business.productioncapacity.components.misc.TabsContainer;
 import com.galya.business.productioncapacity.components.tabs.Tab;
+import com.galya.business.productioncapacity.components.tabs.TabLabelChangeListener;
 
 public class MainTabbedPane extends JTabbedPane implements TabsContainer {
 
@@ -48,6 +49,15 @@ public class MainTabbedPane extends JTabbedPane implements TabsContainer {
         setTabComponentAt(nextIndex, label);
         setToolTipTextAt(nextIndex, labelText);
         setSelectedIndex(nextIndex);
+        
+        tab.setTabLabelChangeListener(new TabLabelChangeListener() {
+
+            @Override
+            public void onTabLabelChange(String newLabelText) {
+                label.setText(newLabelText);
+            }
+            
+        });
     }
 
 }

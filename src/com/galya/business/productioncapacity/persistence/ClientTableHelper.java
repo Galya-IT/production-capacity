@@ -128,21 +128,142 @@ public class ClientTableHelper implements TableHelper {
 
             PreparedStatement statement = connection.prepareStatement(insertNewClientQuery,
                     Statement.RETURN_GENERATED_KEYS);
-            
+
             statement.setString(1, client.getName());
-            
+
+            if (!isEmpty(client.getBulstat())) {
+                statement.setString(2, client.getBulstat());
+            }
+
+            if (!isEmpty(client.getSeatAddress())) {
+                statement.setString(3, client.getSeatAddress());
+            }
+
+            if (client.getEconomicActivitySection() != null) {
+                statement.setString(4, client.getEconomicActivitySection().getId());
+            }
+
+            if (client.getEconomicActivityDivision() != null) {
+                statement.setString(5, client.getEconomicActivityDivision().getId());
+            }
+
+            if (client.getEconomicActivityGroup() != null) {
+                statement.setString(6, client.getEconomicActivityGroup().getId());
+            }
+
+            if (client.getEconomicActivityClass() != null) {
+                statement.setString(7, client.getEconomicActivityClass().getId());
+            }
+
+            if (client.getInvestmentRegion() != null) {
+                statement.setString(8, client.getInvestmentRegion());
+            }
+
+            if (client.getInvestmentDistrict() != null) {
+                statement.setString(9, client.getInvestmentDistrict());
+            }
+
+            if (client.getInvestmentMunicipality() != null) {
+                statement.setString(10, client.getInvestmentMunicipality());
+            }
+
+            if (!isEmpty(client.getInvestmentAddress())) {
+                statement.setString(11, client.getInvestmentAddress());
+            }
+
+            if (client.getFirstDocumentsReceptionDate() != null) {
+                statement.setLong(12, client.getFirstDocumentsReceptionDate().getTime());
+            }
+
+            if (client.getLastDocumentsReceptionDate() != null) {
+                statement.setLong(13, client.getLastDocumentsReceptionDate().getTime());
+            }
+
+            if (!isEmpty(client.getNotes())) {
+                statement.setString(14, client.getNotes());
+            }
+
+            if (client.getCategory() != null) {
+                statement.setInt(15, client.getCategory().getId());
+            }
+
+            if (!isEmpty(client.getWholeInvestitionAmount())) {
+                statement.setString(16, client.getWholeInvestitionAmount());
+            }
+
+            if (!isEmpty(client.getStandards())) {
+                statement.setString(17, client.getStandards());
+            }
+
+            if (!isEmpty(client.getSoftwareSystems())) {
+                statement.setString(18, client.getSoftwareSystems());
+            }
+
+            if (!isEmpty(client.getOtherCompaniesConnections())) {
+                statement.setString(19, client.getOtherCompaniesConnections());
+            }
+
+            statement.execute();
+
+            try (ResultSet generatedKeys = statement.getGeneratedKeys();) {
+                if (generatedKeys.next()) {
+                    id = generatedKeys.getLong(1);
+                } else {
+                    throw new SQLException("Creating user failed, no ID obtained.");
+                }
+            }
+            statement.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return id;
+    }
+
+    public boolean updateClient(Client client) {
+        boolean isSuccessful = false;
+        
+        try (Connection connection = ProductionCapacityDatabaseManager.getConnection();) {
+            // @formatter:off
+            String updateOldClientQuery = "UPDATE " + CLIENT_TABLE + " SET "
+                    + CLIENT_TABLE_NAME + "=?, "
+                    + CLIENT_TABLE_BULSTAT + "=?, "
+                    + CLIENT_TABLE_SEAT + "=?, "
+                    + CLIENT_TABLE_EA_SECTION_ID + "=?, "
+                    + CLIENT_TABLE_EA_DIVISION_ID + "=?, "
+                    + CLIENT_TABLE_EA_GROUP_ID + "=?, "
+                    + CLIENT_TABLE_EA_CLASS_ID + "=?, "
+                    + CLIENT_TABLE_INV_REGION + "=?, "
+                    + CLIENT_TABLE_INV_DISTRICT + "=?, "
+                    + CLIENT_TABLE_INV_MUNICIPALITY + "=?, "
+                    + CLIENT_TABLE_INV_ADDRESS + "=?, "
+                    + CLIENT_TABLE_FIRST_RECEPTION_DATE + "=?, "
+                    + CLIENT_TABLE_LAST_RECEPTION_DATE + "=?, "
+                    + CLIENT_TABLE_NOTES + "=?, "
+                    + CLIENT_TABLE_CATEGORY_ID + "=?, "
+                    + CLIENT_TABLE_WHOLE_INV_AMOUNT + "=?, "
+                    + CLIENT_TABLE_STANDARDS + "=?, "
+                    + CLIENT_TABLE_SOFTWARE_SYSTEMS + "=?, "
+                    + CLIENT_TABLE_COMPANIES_CONNECTIONS + "=? "
+                    + "WHERE " + CLIENT_TABLE_ID + "=?";
+            // @formatter:on
+
+            PreparedStatement statement = connection.prepareStatement(updateOldClientQuery);
+
+            statement.setString(1, client.getName());
+
             if (!isEmpty(client.getBulstat())) {
                 statement.setString(2, client.getBulstat());
             } else {
                 statement.setNull(2, Types.VARCHAR);
             }
-            
+
             if (!isEmpty(client.getSeatAddress())) {
                 statement.setString(3, client.getSeatAddress());
             } else {
                 statement.setNull(3, Types.VARCHAR);
             }
-            
+
             if (client.getEconomicActivitySection() != null) {
                 statement.setString(4, client.getEconomicActivitySection().getId());
             } else {
@@ -160,7 +281,7 @@ public class ClientTableHelper implements TableHelper {
             } else {
                 statement.setNull(6, Types.VARCHAR);
             }
-            
+
             if (client.getEconomicActivityClass() != null) {
                 statement.setString(7, client.getEconomicActivityClass().getId());
             } else {
@@ -178,13 +299,13 @@ public class ClientTableHelper implements TableHelper {
             } else {
                 statement.setNull(9, Types.VARCHAR);
             }
-            
+
             if (client.getInvestmentMunicipality() != null) {
                 statement.setString(10, client.getInvestmentMunicipality());
             } else {
                 statement.setNull(10, Types.VARCHAR);
             }
-            
+
             if (!isEmpty(client.getInvestmentAddress())) {
                 statement.setString(11, client.getInvestmentAddress());
             } else {
@@ -196,7 +317,7 @@ public class ClientTableHelper implements TableHelper {
             } else {
                 statement.setNull(12, Types.INTEGER);
             }
-            
+
             if (client.getLastDocumentsReceptionDate() != null) {
                 statement.setLong(13, client.getLastDocumentsReceptionDate().getTime());
             } else {
@@ -208,7 +329,7 @@ public class ClientTableHelper implements TableHelper {
             } else {
                 statement.setNull(14, Types.VARCHAR);
             }
-            
+
             if (client.getCategory() != null) {
                 statement.setInt(15, client.getCategory().getId());
             } else {
@@ -232,27 +353,25 @@ public class ClientTableHelper implements TableHelper {
             } else {
                 statement.setNull(18, Types.VARCHAR);
             }
-            
+
             if (!isEmpty(client.getOtherCompaniesConnections())) {
                 statement.setString(19, client.getOtherCompaniesConnections());
             } else {
                 statement.setNull(19, Types.VARCHAR);
-            }       
-            
-            statement.execute();
-
-            try (ResultSet generatedKeys = statement.getGeneratedKeys();) {
-                if (generatedKeys.next()) {
-                    id = generatedKeys.getLong(1);
-                } else {
-                    throw new SQLException("Creating user failed, no ID obtained.");
-                }
             }
+
+            statement.setLong(20, client.getId());
+
+            int affectedRows = statement.executeUpdate();
+            if (affectedRows > 0) {
+                isSuccessful = true;
+            }
+            
             statement.close();
         } catch (SQLException e) {
             e.printStackTrace();
         }
 
-        return id;
+        return isSuccessful;
     }
 }

@@ -1,16 +1,12 @@
 package com.galya.business.productioncapacity.persistence;
 
-import static com.galya.business.productioncapacity.persistence.ProductionCapacityDatabaseManager.VARCHAR_MAX_LENGTH;
-import static com.galya.business.productioncapacity.utils.CommonUtils.isEmpty;
-
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.sql.Types;
 
-import com.galya.business.productioncapacity.model.Client;
+import com.galya.business.productioncapacity.model.FinancialReport;
 
 public class FinancialReportTableHelper implements TableHelper {
 
@@ -18,51 +14,38 @@ public class FinancialReportTableHelper implements TableHelper {
     private static final String FINANCIAL_REPORT_TABLE = "Financial_Report";
 
     private static final String FINANCIAL_REPORT_TABLE_ID = "_id";
-    private static final String FINANCIAL_REPORT_TABLE_NAME = "name";
-    private static final String FINANCIAL_REPORT_TABLE_BULSTAT = "bulstat";
-    private static final String FINANCIAL_REPORT_TABLE_SEAT = "seat_address";
-    private static final String FINANCIAL_REPORT_TABLE_EA_SECTION_ID = "economic_activity_section_id";
-    private static final String FINANCIAL_REPORT_TABLE_EA_DIVISION_ID = "economic_activity_division_id";
-    private static final String FINANCIAL_REPORT_TABLE_EA_GROUP_ID = "economic_activity_group_id";
-    private static final String FINANCIAL_REPORT_TABLE_EA_CLASS_ID = "economic_activity_class_id";
-    private static final String FINANCIAL_REPORT_TABLE_INV_REGION = "investment_region";
-    private static final String FINANCIAL_REPORT_TABLE_INV_DISTRICT = "investment_district";
-    private static final String FINANCIAL_REPORT_TABLE_INV_MUNICIPALITY = "investment_municipality";
-    private static final String FINANCIAL_REPORT_TABLE_INV_ADDRESS = "investment_address";
-    private static final String FINANCIAL_REPORT_TABLE_FIRST_RECEPTION_DATE = "first_documents_reception_date_timestamp";
-    private static final String FINANCIAL_REPORT_TABLE_LAST_RECEPTION_DATE = "last_documents_Reception_date_timestamp";
-    private static final String FINANCIAL_REPORT_TABLE_NOTES = "notes";
-    private static final String FINANCIAL_REPORT_TABLE_CATEGORY_ID = "category_id";
-    private static final String FINANCIAL_REPORT_TABLE_WHOLE_INV_AMOUNT = "whole_investition_amount";
-    private static final String FINANCIAL_REPORT_TABLE_STANDARDS = "standards";
-    private static final String FINANCIAL_REPORT_TABLE_SOFTWARE_SYSTEMS = "software_systems";
-    private static final String FINANCIAL_REPORT_TABLE_COMPANIES_CONNECTIONS = "other_companies_connections";
 
-    // this limit doesn't work for SQLite, but for other SQL DBs will be fine
-    private static final String TABLE_CREATION_QUERY_TYPE_VARCHAR = " varchar(" + VARCHAR_MAX_LENGTH + ") ";
+    private static final String FINANCIAL_REPORT_TABLE_COMPANY_ID = "company_id";
+    private static final String FINANCIAL_REPORT_TABLE_YEAR = "year";
+    private static final String FINANCIAL_REPORT_TABLE_ASSETS_SUM = "assets_sum";
+    private static final String FINANCIAL_REPORT_TABLE_NET_PROFIT = "net_profit";
+    private static final String FINANCIAL_REPORT_TABLE_EQUITY = "equity";
+    private static final String FINANCIAL_REPORT_TABLE_LIABILITIES_PROVISIONS = "liabilities_and_provisions";
+    private static final String FINANCIAL_REPORT_TABLE_NET_SALES = "net_sales";
+    private static final String FINANCIAL_REPORT_TABLE_INCOME_OP_ACTIVITIES = "income_operating_activities";
+    private static final String FINANCIAL_REPORT_TABLE_OUTLAY_OP_ACTIVITIES = "outlay_operating_activities";
+    private static final String FINANCIAL_REPORT_TABLE_AMORTIZATION = "amortization";
+    private static final String FINANCIAL_REPORT_TABLE_AVG_STAFF_NUMBER = "avg_staff_number";
+    private static final String FINANCIAL_REPORT_TABLE_INVESTMENTS_EQUIPMENT = "investments_equipment";
+    private static final String FINANCIAL_REPORT_TABLE_EARNINGS_EXPORT_TOLLING = "earningsExportTolling";
 
     // @formatter:off
-    private static final String FINANCIAL_REPORT_TABLE_CREATION_QUERY = "CREATE TABLE IF NOT EXISTS " + FINANCIAL_REPORT_TABLE + " ("
+    private static final String FINANCIAL_REPORT_TABLE_CREATION_QUERY = "CREATE TABLE IF NOT EXISTS "
+            + FINANCIAL_REPORT_TABLE + " ("
             + FINANCIAL_REPORT_TABLE_ID + " integer primary key autoincrement, "
-            + FINANCIAL_REPORT_TABLE_NAME + TABLE_CREATION_QUERY_TYPE_VARCHAR + "unique not null, "
-            + FINANCIAL_REPORT_TABLE_BULSTAT + TABLE_CREATION_QUERY_TYPE_VARCHAR + ", "
-            + FINANCIAL_REPORT_TABLE_SEAT + TABLE_CREATION_QUERY_TYPE_VARCHAR + ", "
-            + FINANCIAL_REPORT_TABLE_EA_SECTION_ID + TABLE_CREATION_QUERY_TYPE_VARCHAR + ", "
-            + FINANCIAL_REPORT_TABLE_EA_DIVISION_ID + TABLE_CREATION_QUERY_TYPE_VARCHAR + ", "
-            + FINANCIAL_REPORT_TABLE_EA_GROUP_ID + TABLE_CREATION_QUERY_TYPE_VARCHAR + ", "
-            + FINANCIAL_REPORT_TABLE_EA_CLASS_ID + TABLE_CREATION_QUERY_TYPE_VARCHAR + ", "
-            + FINANCIAL_REPORT_TABLE_INV_REGION + TABLE_CREATION_QUERY_TYPE_VARCHAR + ", "
-            + FINANCIAL_REPORT_TABLE_INV_DISTRICT + TABLE_CREATION_QUERY_TYPE_VARCHAR + ", "
-            + FINANCIAL_REPORT_TABLE_INV_MUNICIPALITY + TABLE_CREATION_QUERY_TYPE_VARCHAR + ", "
-            + FINANCIAL_REPORT_TABLE_INV_ADDRESS + TABLE_CREATION_QUERY_TYPE_VARCHAR + ", "
-            + FINANCIAL_REPORT_TABLE_FIRST_RECEPTION_DATE + " integer, "
-            + FINANCIAL_REPORT_TABLE_LAST_RECEPTION_DATE + " integer, "
-            + FINANCIAL_REPORT_TABLE_NOTES + " varchar, "
-            + FINANCIAL_REPORT_TABLE_CATEGORY_ID + " integer, "
-            + FINANCIAL_REPORT_TABLE_WHOLE_INV_AMOUNT + TABLE_CREATION_QUERY_TYPE_VARCHAR + ", "
-            + FINANCIAL_REPORT_TABLE_STANDARDS + TABLE_CREATION_QUERY_TYPE_VARCHAR + ", "
-            + FINANCIAL_REPORT_TABLE_SOFTWARE_SYSTEMS + TABLE_CREATION_QUERY_TYPE_VARCHAR + ", "
-            + FINANCIAL_REPORT_TABLE_COMPANIES_CONNECTIONS + TABLE_CREATION_QUERY_TYPE_VARCHAR + ");";
+            + FINANCIAL_REPORT_TABLE_COMPANY_ID + " integer not null, "
+            + FINANCIAL_REPORT_TABLE_YEAR + " integer not null, "
+            + FINANCIAL_REPORT_TABLE_ASSETS_SUM + " integer, "
+            + FINANCIAL_REPORT_TABLE_NET_PROFIT + " integer, "
+            + FINANCIAL_REPORT_TABLE_EQUITY + " integer, "
+            + FINANCIAL_REPORT_TABLE_LIABILITIES_PROVISIONS + " integer, "
+            + FINANCIAL_REPORT_TABLE_NET_SALES + " integer, "
+            + FINANCIAL_REPORT_TABLE_INCOME_OP_ACTIVITIES + " integer, "
+            + FINANCIAL_REPORT_TABLE_OUTLAY_OP_ACTIVITIES + " integer, "
+            + FINANCIAL_REPORT_TABLE_AMORTIZATION + " integer, "
+            + FINANCIAL_REPORT_TABLE_AVG_STAFF_NUMBER + " integer, "
+            + FINANCIAL_REPORT_TABLE_INVESTMENTS_EQUIPMENT + " integer, "
+            + FINANCIAL_REPORT_TABLE_EARNINGS_EXPORT_TOLLING + " integer" + ");";
     // @formatter:on
 
     private static FinancialReportTableHelper instance;
@@ -98,161 +81,112 @@ public class FinancialReportTableHelper implements TableHelper {
     public void populateDefaultValues(Connection connection) throws SQLException {
     }
 
-    public long addClient(Client client) {
+    public long addReport(long companyId, FinancialReport report) {
         long id = -1;
 
         try (Connection connection = ProductionCapacityDatabaseManager.getConnection();) {
             // @formatter:off
-            String insertNewClientQuery = "INSERT INTO " + FINANCIAL_REPORT_TABLE + "("
-                    + FINANCIAL_REPORT_TABLE_NAME + ", "
-                    + FINANCIAL_REPORT_TABLE_BULSTAT + ", "
-                    + FINANCIAL_REPORT_TABLE_SEAT + ", "
-                    + FINANCIAL_REPORT_TABLE_EA_SECTION_ID + ", "
-                    + FINANCIAL_REPORT_TABLE_EA_DIVISION_ID + ", "
-                    + FINANCIAL_REPORT_TABLE_EA_GROUP_ID + ", "
-                    + FINANCIAL_REPORT_TABLE_EA_CLASS_ID + ", "
-                    + FINANCIAL_REPORT_TABLE_INV_REGION + ", "
-                    + FINANCIAL_REPORT_TABLE_INV_DISTRICT + ", "
-                    + FINANCIAL_REPORT_TABLE_INV_MUNICIPALITY + ", "
-                    + FINANCIAL_REPORT_TABLE_INV_ADDRESS + ", "
-                    + FINANCIAL_REPORT_TABLE_FIRST_RECEPTION_DATE + ", "
-                    + FINANCIAL_REPORT_TABLE_LAST_RECEPTION_DATE + ", "
-                    + FINANCIAL_REPORT_TABLE_NOTES + ", "
-                    + FINANCIAL_REPORT_TABLE_CATEGORY_ID + ", "
-                    + FINANCIAL_REPORT_TABLE_WHOLE_INV_AMOUNT + ", "
-                    + FINANCIAL_REPORT_TABLE_STANDARDS + ", "
-                    + FINANCIAL_REPORT_TABLE_SOFTWARE_SYSTEMS + ", "
-                    + FINANCIAL_REPORT_TABLE_COMPANIES_CONNECTIONS + ") "
-                    + "VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+            String insertNewReportQuery = "INSERT INTO " + FINANCIAL_REPORT_TABLE + "("
+                    + FINANCIAL_REPORT_TABLE_COMPANY_ID + ", "
+                    + FINANCIAL_REPORT_TABLE_YEAR + ", "
+                    + FINANCIAL_REPORT_TABLE_ASSETS_SUM + ", "
+                    + FINANCIAL_REPORT_TABLE_NET_PROFIT + ", "
+                    + FINANCIAL_REPORT_TABLE_EQUITY + ", "
+                    + FINANCIAL_REPORT_TABLE_LIABILITIES_PROVISIONS + ", "
+                    + FINANCIAL_REPORT_TABLE_NET_SALES + ", "
+                    + FINANCIAL_REPORT_TABLE_INCOME_OP_ACTIVITIES + ", "
+                    + FINANCIAL_REPORT_TABLE_OUTLAY_OP_ACTIVITIES + ", "
+                    + FINANCIAL_REPORT_TABLE_AMORTIZATION + ", "
+                    + FINANCIAL_REPORT_TABLE_AVG_STAFF_NUMBER + ", "
+                    + FINANCIAL_REPORT_TABLE_INVESTMENTS_EQUIPMENT + ", "
+                    + FINANCIAL_REPORT_TABLE_EARNINGS_EXPORT_TOLLING + ") "
+                    + "VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)";
             // @formatter:on
 
-            PreparedStatement statement = connection.prepareStatement(insertNewClientQuery,
+            PreparedStatement statement = connection.prepareStatement(insertNewReportQuery,
                     Statement.RETURN_GENERATED_KEYS);
-            
-            statement.setString(1, client.getName());
-            
-            if (!isEmpty(client.getBulstat())) {
-                statement.setString(2, client.getBulstat());
-            } else {
-                statement.setNull(2, Types.VARCHAR);
-            }
-            
-            if (!isEmpty(client.getSeatAddress())) {
-                statement.setString(3, client.getSeatAddress());
-            } else {
-                statement.setNull(3, Types.VARCHAR);
-            }
-            
-            if (client.getEconomicActivitySection() != null) {
-                statement.setString(4, client.getEconomicActivitySection().getId());
-            } else {
-                statement.setNull(4, Types.VARCHAR);
-            }
 
-            if (client.getEconomicActivityDivision() != null) {
-                statement.setString(5, client.getEconomicActivityDivision().getId());
-            } else {
-                statement.setNull(5, Types.VARCHAR);
-            }
-
-            if (client.getEconomicActivityGroup() != null) {
-                statement.setString(6, client.getEconomicActivityGroup().getId());
-            } else {
-                statement.setNull(6, Types.VARCHAR);
-            }
-            
-            if (client.getEconomicActivityClass() != null) {
-                statement.setString(7, client.getEconomicActivityClass().getId());
-            } else {
-                statement.setNull(7, Types.VARCHAR);
-            }
-
-            if (client.getInvestmentRegion() != null) {
-                statement.setString(8, client.getInvestmentRegion());
-            } else {
-                statement.setNull(8, Types.VARCHAR);
-            }
-
-            if (client.getInvestmentDistrict() != null) {
-                statement.setString(9, client.getInvestmentDistrict());
-            } else {
-                statement.setNull(9, Types.VARCHAR);
-            }
-            
-            if (client.getInvestmentMunicipality() != null) {
-                statement.setString(10, client.getInvestmentMunicipality());
-            } else {
-                statement.setNull(10, Types.VARCHAR);
-            }
-            
-            if (!isEmpty(client.getInvestmentAddress())) {
-                statement.setString(11, client.getInvestmentAddress());
-            } else {
-                statement.setNull(11, Types.VARCHAR);
-            }
-
-            if (client.getFirstDocumentsReceptionDate() != null) {
-                statement.setLong(12, client.getFirstDocumentsReceptionDate().getTime());
-            } else {
-                statement.setNull(12, Types.INTEGER);
-            }
-            
-            if (client.getLastDocumentsReceptionDate() != null) {
-                statement.setLong(13, client.getLastDocumentsReceptionDate().getTime());
-            } else {
-                statement.setNull(13, Types.INTEGER);
-            }
-
-            if (!isEmpty(client.getNotes())) {
-                statement.setString(14, client.getNotes());
-            } else {
-                statement.setNull(14, Types.VARCHAR);
-            }
-            
-            if (client.getCategory() != null) {
-                statement.setInt(15, client.getCategory().getId());
-            } else {
-                statement.setNull(15, Types.INTEGER);
-            }
-
-            if (!isEmpty(client.getWholeInvestitionAmount())) {
-                statement.setString(16, client.getWholeInvestitionAmount());
-            } else {
-                statement.setNull(16, Types.VARCHAR);
-            }
-
-            if (!isEmpty(client.getStandards())) {
-                statement.setString(17, client.getStandards());
-            } else {
-                statement.setNull(17, Types.VARCHAR);
-            }
-
-            if (!isEmpty(client.getSoftwareSystems())) {
-                statement.setString(18, client.getSoftwareSystems());
-            } else {
-                statement.setNull(18, Types.VARCHAR);
-            }
-            
-            if (!isEmpty(client.getOtherCompaniesConnections())) {
-                statement.setString(19, client.getOtherCompaniesConnections());
-            } else {
-                statement.setNull(19, Types.VARCHAR);
-            }       
+            statement.setLong(1, companyId);
+            statement.setInt(2, report.getYear());
+            statement.setDouble(3, report.getAssetsSum());
+            statement.setDouble(4, report.getNetProfit());
+            statement.setDouble(5, report.getEquity());
+            statement.setDouble(6, report.getLiabilitiesProvisions());
+            statement.setDouble(7, report.getNetSales());
+            statement.setDouble(8, report.getIncomeOperatingActivities());
+            statement.setDouble(9, report.getOutlayOperatingActivities());
+            statement.setDouble(10, report.getAmortization());
+            statement.setDouble(11, report.getAvgStaffNumber());
+            statement.setDouble(12, report.getInvestmentsEquipment());
+            statement.setDouble(13, report.getEarningsExportTolling());
             
             statement.execute();
-
+            
             try (ResultSet generatedKeys = statement.getGeneratedKeys();) {
                 if (generatedKeys.next()) {
                     id = generatedKeys.getLong(1);
                 } else {
-                    throw new SQLException("Creating user failed, no ID obtained.");
+                    throw new SQLException("Creating financial report failed, no ID obtained.");
                 }
             }
+
             statement.close();
         } catch (SQLException e) {
             e.printStackTrace();
         }
 
         return id;
+    }
+    
+    public boolean updateReport(long companyId, FinancialReport report) {
+        boolean isSuccessful = false;
+        
+        try (Connection connection = ProductionCapacityDatabaseManager.getConnection();) {
+            // @formatter:off
+            String updateOldReportQuery = "UPDATE " + FINANCIAL_REPORT_TABLE + " SET "
+                    + FINANCIAL_REPORT_TABLE_COMPANY_ID + "=?, "
+                    + FINANCIAL_REPORT_TABLE_YEAR + "=?, "
+                    + FINANCIAL_REPORT_TABLE_ASSETS_SUM + "=?, "
+                    + FINANCIAL_REPORT_TABLE_NET_PROFIT + "=?, "
+                    + FINANCIAL_REPORT_TABLE_EQUITY + "=?, "
+                    + FINANCIAL_REPORT_TABLE_LIABILITIES_PROVISIONS + "=?, "
+                    + FINANCIAL_REPORT_TABLE_NET_SALES + "=?, "
+                    + FINANCIAL_REPORT_TABLE_INCOME_OP_ACTIVITIES + "=?, "
+                    + FINANCIAL_REPORT_TABLE_OUTLAY_OP_ACTIVITIES + "=?, "
+                    + FINANCIAL_REPORT_TABLE_AMORTIZATION + "=?, "
+                    + FINANCIAL_REPORT_TABLE_AVG_STAFF_NUMBER + "=?, "
+                    + FINANCIAL_REPORT_TABLE_INVESTMENTS_EQUIPMENT + "=?, "
+                    + FINANCIAL_REPORT_TABLE_EARNINGS_EXPORT_TOLLING + "=? "
+                    + "WHERE " + FINANCIAL_REPORT_TABLE_ID + "=?";
+            // @formatter:on
+
+            PreparedStatement statement = connection.prepareStatement(updateOldReportQuery);
+
+            statement.setLong(1, companyId);
+            statement.setInt(2, report.getYear());
+            statement.setDouble(3, report.getAssetsSum());
+            statement.setDouble(4, report.getNetProfit());
+            statement.setDouble(5, report.getEquity());
+            statement.setDouble(6, report.getLiabilitiesProvisions());
+            statement.setDouble(7, report.getNetSales());
+            statement.setDouble(8, report.getIncomeOperatingActivities());
+            statement.setDouble(9, report.getOutlayOperatingActivities());
+            statement.setDouble(10, report.getAmortization());
+            statement.setDouble(11, report.getAvgStaffNumber());
+            statement.setDouble(12, report.getInvestmentsEquipment());
+            statement.setDouble(13, report.getEarningsExportTolling());
+            statement.setLong(14, report.getId());
+            
+            long affectedRows = statement.executeUpdate();
+            if (affectedRows > 0) {
+                isSuccessful = true;
+            }
+            
+            statement.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        
+        return isSuccessful;
     }
 }

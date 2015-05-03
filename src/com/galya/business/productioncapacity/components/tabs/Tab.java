@@ -24,13 +24,15 @@ public abstract class Tab {
     private String closeConfirmDialogMsg;
     private Dimension preferedTabDimension;
 
+    private TabLabelChangeListener tabLabelChangeListener;
+    
     private ActionListener onCloseListener = new ActionListener() {
         @Override
         public void actionPerformed(ActionEvent event) {
             onClose(event);
         }
     };
-
+    
     protected Tab() {
     }
 
@@ -70,6 +72,9 @@ public abstract class Tab {
 
     protected final void setLabel(String label) {
         this.label = label;
+        if (tabLabelChangeListener != null) {
+            tabLabelChangeListener.onTabLabelChange(this.label);
+        }
     }
 
     protected final void setIcon(ImageIcon icon) {
@@ -107,6 +112,10 @@ public abstract class Tab {
         if (dialogResult == JOptionPane.YES_OPTION) {
             baseComponent.getParent().remove(baseComponent);
         }
+    }
+
+    public void setTabLabelChangeListener(TabLabelChangeListener tabLabelChangeListener) {
+        this.tabLabelChangeListener = tabLabelChangeListener;
     }
 
 }
