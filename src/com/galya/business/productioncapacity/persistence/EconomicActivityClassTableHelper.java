@@ -97,7 +97,7 @@ public class EconomicActivityClassTableHelper implements TableHelper {
             ResultSet rs = stmt.executeQuery();
 
             while (rs.next()) {
-                int databaseId = rs.getInt(EA_CLASS_TABLE_ID);
+                long databaseId = rs.getInt(EA_CLASS_TABLE_ID);
                 String classId = rs.getString(EA_CLASS_TABLE_CLASS_ID);
                 String className = rs.getString(EA_CLASS_TABLE_CLASS_NAME);
                 String groupId = rs.getString(EA_CLASS_TABLE_GROUP_ID);
@@ -111,17 +111,18 @@ public class EconomicActivityClassTableHelper implements TableHelper {
         }
         return allClasses;
     }
-    
+
     public List<EconomicActivityClass> getByGroupId(String groupId) {
         List<EconomicActivityClass> classesByGroupId = new ArrayList<EconomicActivityClass>();
 
         try (Connection connection = ProductionCapacityDatabaseManager.getConnection();) {
-            PreparedStatement stmt = connection.prepareStatement("SELECT * FROM " + EA_CLASS_TABLE + " WHERE " + EA_CLASS_TABLE_GROUP_ID + "=?");
+            PreparedStatement stmt = connection.prepareStatement("SELECT * FROM " + EA_CLASS_TABLE + " WHERE "
+                    + EA_CLASS_TABLE_GROUP_ID + "=?");
             stmt.setString(1, groupId);
             ResultSet rs = stmt.executeQuery();
 
             while (rs.next()) {
-                int databaseId = rs.getInt(EA_CLASS_TABLE_ID);
+                long databaseId = rs.getInt(EA_CLASS_TABLE_ID);
                 String classId = rs.getString(EA_CLASS_TABLE_CLASS_ID);
                 String className = rs.getString(EA_CLASS_TABLE_CLASS_NAME);
                 EconomicActivityClass currentClass = new EconomicActivityClass(databaseId, classId, className, groupId);
@@ -133,5 +134,30 @@ public class EconomicActivityClassTableHelper implements TableHelper {
             e.printStackTrace();
         }
         return classesByGroupId;
+    }
+
+    public EconomicActivityClass getByClassId(String classId) {
+        EconomicActivityClass eaClass = null;
+
+        try (Connection connection = ProductionCapacityDatabaseManager.getConnection();) {
+            PreparedStatement stmt = connection.prepareStatement("SELECT * FROM " + EA_CLASS_TABLE + " WHERE "
+                    + EA_CLASS_TABLE_CLASS_ID + "=?");
+            stmt.setString(1, classId);
+
+            ResultSet rs = stmt.executeQuery();
+
+            boolean isAnyResult = rs.next();
+            if (isAnyResult) {
+                eaClass = new EconomicActivityClass(rs.getLong(EA_CLASS_TABLE_ID), classId,
+                        rs.getString(EA_CLASS_TABLE_CLASS_NAME), rs.getString(EA_CLASS_TABLE_GROUP_ID));
+            }
+
+            rs.close();
+            stmt.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return eaClass;
     }
 }

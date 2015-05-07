@@ -6,6 +6,8 @@ encoding//src/com/galya/business/productioncapacity/components/FinancialReportsM
 encoding//src/com/galya/business/productioncapacity/components/LoginDialog.java=UTF-8
 encoding//src/com/galya/business/productioncapacity/components/misc/DatePickerFactory.java=UTF-8
 encoding//src/com/galya/business/productioncapacity/components/tabs/ClientTab.java=UTF-8
+encoding//src/com/galya/business/productioncapacity/components/tabs/MainTab.java=UTF-8
+encoding//src/com/galya/business/productioncapacity/components/tabs/SearchTab.java=UTF-8
 encoding//src/com/galya/business/productioncapacity/model/CompanyCategory.java=UTF-8
 encoding//src/com/galya/business/productioncapacity/persistence/AdministrativeRuralAreasTableHelper.java=UTF-8
 encoding//src/com/galya/business/productioncapacity/persistence/EconomicActivityClassTableHelper.java=UTF-8

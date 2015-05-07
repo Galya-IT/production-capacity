@@ -10,14 +10,18 @@ import java.util.Map;
 import javax.swing.JPanel;
 
 public class GridBagLayoutBuffer {
+    
+    public static final int DEFAULT_WEIGHT_X = 0;
+    public static final int DEFAULT_WEIGHT_Y = 0;
+    public static final int DEFAULT_INSETS_VALUE = 4;
+    public static final Insets DEFAULT_INSETS = new Insets(DEFAULT_INSETS_VALUE, DEFAULT_INSETS_VALUE, DEFAULT_INSETS_VALUE, DEFAULT_INSETS_VALUE);
+    
     private static final String KEY_STARTCOL = "StartCol";
     private static final String KEY_WIDTHCOL = "WidthCol";
     private static final String KEY_ISCENTERED = "IsCentered";
     private static final String KEY_WEIGHT_X = "WeightX";
     private static final String KEY_WEIGHT_Y = "WeightY";
-
-    private static final int DEFAULT_WEIGHT_X = 0;
-    private static final int DEFAULT_WEIGHT_Y = 0;
+    private static final String KEY_INSETS_VALUE = "InsetsValue";
 
     private LinkedHashMap<Component, HashMap<String, Integer>> components = new LinkedHashMap<Component, HashMap<String, Integer>>();
     private GridBagConstraints constraints = new GridBagConstraints();
@@ -33,10 +37,19 @@ public class GridBagLayoutBuffer {
     }
 
     public void add(Component component, int startCol, int widthCol, boolean isCenter) {
-        add(component, startCol, widthCol, isCenter, DEFAULT_WEIGHT_X, DEFAULT_WEIGHT_Y);
+        add(component, startCol, widthCol, isCenter, DEFAULT_WEIGHT_X, DEFAULT_WEIGHT_Y, DEFAULT_INSETS_VALUE);
+    }
+    
+    public void add(Component component, int startCol, int widthCol, boolean isCenter, int insets) {
+        add(component, startCol, widthCol, isCenter, DEFAULT_WEIGHT_X, DEFAULT_WEIGHT_Y, insets);
+    }
+    
+    public void add(Component component, int startCol, int widthCol, boolean isCenter, int weightX, int weightY) {
+        add(component, startCol, widthCol, isCenter, weightX, weightY, DEFAULT_INSETS_VALUE);
     }
 
-    public void add(Component component, int startCol, int widthCol, boolean isCenter, int weightX, int weightY) {
+    @SuppressWarnings("serial")
+    public void add(Component component, int startCol, int widthCol, boolean isCenter, int weightX, int weightY, int insets) {
         int isCenterInt = (isCenter) ? 1 : 0;
         components.put(component, new HashMap<String, Integer>() {
             {
@@ -45,6 +58,7 @@ public class GridBagLayoutBuffer {
                 put(KEY_ISCENTERED, isCenterInt);
                 put(KEY_WEIGHT_X, weightX);
                 put(KEY_WEIGHT_Y, weightY);
+                put(KEY_INSETS_VALUE, insets);
             }
         });
     }
@@ -62,6 +76,7 @@ public class GridBagLayoutBuffer {
             int colNumber = details.get(KEY_STARTCOL);
             boolean isCentered = details.get(KEY_ISCENTERED) == 1;
             int width = details.get(KEY_WIDTHCOL);
+            int insetsValue = details.get(KEY_INSETS_VALUE);
 
             int weightX = details.get(KEY_WEIGHT_X);
             int weightY = details.get(KEY_WEIGHT_Y);
@@ -79,10 +94,14 @@ public class GridBagLayoutBuffer {
             if (isCentered) {
                 constraints.fill = GridBagConstraints.CENTER;
             }
+            
+            if (insetsValue != DEFAULT_INSETS_VALUE) {
+                constraints.insets = new Insets(insetsValue, insetsValue, insetsValue, insetsValue);
+            }
 
             panel.add(component, constraints);
 
-            if (isCentered) {
+            if (isCentered || insetsValue != DEFAULT_INSETS_VALUE) {
                 setDefaultConstraints();
             }
         }
@@ -92,6 +111,7 @@ public class GridBagLayoutBuffer {
 
     private void setDefaultConstraints() {
         constraints.fill = GridBagConstraints.BOTH;
-        constraints.insets = new Insets(4, 4, 4, 4);
+        constraints.insets = DEFAULT_INSETS;
+        constraints.anchor = GridBagConstraints.NORTH;
     }
 }

@@ -31,11 +31,6 @@ public class Client {
 
     private String notes;
 
-    private CompanyCategory category;
-    private int minAmountFunding;
-    private int maxAmountFunding;
-    private int maxPercentageFunding;
-
     private String wholeInvestitionAmount;
     private String standards;
     private String softwareSystems;
@@ -50,7 +45,7 @@ public class Client {
             EconomicActivityDivision economicActivityDivision, EconomicActivityGroup economicActivityGroup,
             EconomicActivityClass economicActivityClass, String investmentRegion, String investmentDistrict,
             String investmentMunicipality, String investmentAddress, Date firstDocumentsReceptionDate,
-            Date lastDocumentsReceptionDate, String notes, CompanyCategory category, String wholeInvestitionAmount,
+            Date lastDocumentsReceptionDate, String notes, String wholeInvestitionAmount,
             String standards, String softwareSystems, String otherCompaniesConnections) {
         this.name = name;
         this.bulstat = bulstat;
@@ -66,7 +61,6 @@ public class Client {
         this.firstDocumentsReceptionDate = firstDocumentsReceptionDate;
         this.lastDocumentsReceptionDate = lastDocumentsReceptionDate;
         this.notes = notes;
-        this.category = category;
         this.wholeInvestitionAmount = wholeInvestitionAmount;
         this.standards = standards;
         this.softwareSystems = softwareSystems;
@@ -143,22 +137,6 @@ public class Client {
 
     public String getNotes() {
         return notes;
-    }
-
-    public CompanyCategory getCategory() {
-        return category;
-    }
-
-    public int getMinAmountFunding() {
-        return minAmountFunding;
-    }
-
-    public int getMaxAmountFunding() {
-        return maxAmountFunding;
-    }
-
-    public int getMaxPercentageFunding() {
-        return maxPercentageFunding;
     }
 
     public String getWholeInvestitionAmount() {
@@ -253,22 +231,6 @@ public class Client {
         this.notes = notes;
     }
 
-    public void setCategory(CompanyCategory category) {
-        this.category = category;
-    }
-
-    public void setMinAmountFunding(int minAmountFunding) {
-        this.minAmountFunding = minAmountFunding;
-    }
-
-    public void setMaxAmountFunding(int maxAmountFunding) {
-        this.maxAmountFunding = maxAmountFunding;
-    }
-
-    public void setMaxPercentageFunding(int maxPercentageFunding) {
-        this.maxPercentageFunding = maxPercentageFunding;
-    }
-
     public void setWholeInvestitionAmount(String wholeInvestitionAmount) {
         this.wholeInvestitionAmount = wholeInvestitionAmount;
     }
@@ -295,5 +257,10 @@ public class Client {
 
     public void removeFile(File file) {
         this.files.remove(file);
+    }
+    
+    @Override
+    public String toString() {
+        return name;
     }
 }

@@ -35,17 +35,17 @@ public class ComponentFactory {
         return label;
     }
 
-    public static JFormattedTextField generateNumericField(double defaultValue) {
-        return generateNumericField(defaultValue, true, null);
+    public static JFormattedTextField generateNumericField() {
+        return generateNumericField(true, null);
     }
 
-    public static JFormattedTextField generateNumericField(double defaultValue, boolean selectOnFocus,
+    public static JFormattedTextField generateNumericField(boolean selectOnFocus,
             Runnable focusLostRunnable) {
         final String NUMBER_FORMAT_THOUSANDS = "#.#####";
         DecimalFormat decimalFormat = new DecimalFormat(NUMBER_FORMAT_THOUSANDS);
         decimalFormat.setGroupingUsed(false);
         JFormattedTextField numericField = new JFormattedTextField(decimalFormat);
-        numericField.setValue(defaultValue);
+        numericField.setValue(new Float(0.0F));
         numericField.setColumns(15);
 
         numericField.addFocusListener(new FocusAdapter() {

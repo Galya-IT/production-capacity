@@ -5,6 +5,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
 
 import com.galya.business.productioncapacity.model.FinancialReport;
 
@@ -119,9 +121,9 @@ public class FinancialReportTableHelper implements TableHelper {
             statement.setDouble(11, report.getAvgStaffNumber());
             statement.setDouble(12, report.getInvestmentsEquipment());
             statement.setDouble(13, report.getEarningsExportTolling());
-            
+
             statement.execute();
-            
+
             try (ResultSet generatedKeys = statement.getGeneratedKeys();) {
                 if (generatedKeys.next()) {
                     id = generatedKeys.getLong(1);
@@ -137,10 +139,10 @@ public class FinancialReportTableHelper implements TableHelper {
 
         return id;
     }
-    
+
     public boolean updateReport(long companyId, FinancialReport report) {
         boolean isSuccessful = false;
-        
+
         try (Connection connection = ProductionCapacityDatabaseManager.getConnection();) {
             // @formatter:off
             String updateOldReportQuery = "UPDATE " + FINANCIAL_REPORT_TABLE + " SET "
@@ -176,17 +178,57 @@ public class FinancialReportTableHelper implements TableHelper {
             statement.setDouble(12, report.getInvestmentsEquipment());
             statement.setDouble(13, report.getEarningsExportTolling());
             statement.setLong(14, report.getId());
-            
+
             long affectedRows = statement.executeUpdate();
             if (affectedRows > 0) {
                 isSuccessful = true;
             }
-            
+
             statement.close();
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        
+
         return isSuccessful;
+    }
+
+    public List<FinancialReport> getReportsByClientId(long companyId) {
+        List<FinancialReport> financialReportsList = new ArrayList<FinancialReport>();
+
+        try (Connection connection = ProductionCapacityDatabaseManager.getConnection();) {
+            String selectLastAddedQuery = "SELECT * FROM " + FINANCIAL_REPORT_TABLE + " WHERE "
+                    + FINANCIAL_REPORT_TABLE_COMPANY_ID + "=?";
+            PreparedStatement preparedStatement = connection.prepareStatement(selectLastAddedQuery);
+            preparedStatement.setLong(1, companyId);
+            ResultSet rs = preparedStatement.executeQuery();
+
+            while (rs.next()) {
+                long databaseId = rs.getLong(FINANCIAL_REPORT_TABLE_ID);
+                int year = rs.getInt(FINANCIAL_REPORT_TABLE_YEAR);
+                double assetsSum = rs.getDouble(FINANCIAL_REPORT_TABLE_ASSETS_SUM);
+                double netProfit = rs.getDouble(FINANCIAL_REPORT_TABLE_NET_PROFIT);
+                double equity = rs.getDouble(FINANCIAL_REPORT_TABLE_EQUITY);
+                double liabilitiesProvisions = rs.getDouble(FINANCIAL_REPORT_TABLE_LIABILITIES_PROVISIONS);
+                double netSales = rs.getDouble(FINANCIAL_REPORT_TABLE_NET_SALES);
+                double incomeOperatingActivities = rs.getDouble(FINANCIAL_REPORT_TABLE_INCOME_OP_ACTIVITIES);
+                double outlayOperatingActivities = rs.getDouble(FINANCIAL_REPORT_TABLE_OUTLAY_OP_ACTIVITIES);
+                double amortization = rs.getDouble(FINANCIAL_REPORT_TABLE_AMORTIZATION);
+                double avgStaffNumber = rs.getDouble(FINANCIAL_REPORT_TABLE_AVG_STAFF_NUMBER);
+                double investmentsEquipment = rs.getDouble(FINANCIAL_REPORT_TABLE_INVESTMENTS_EQUIPMENT);
+                double earningsExportTolling = rs.getDouble(FINANCIAL_REPORT_TABLE_EARNINGS_EXPORT_TOLLING);
+                
+                FinancialReport financialReport = new FinancialReport(year, assetsSum, netProfit, equity,
+                        liabilitiesProvisions, netSales, incomeOperatingActivities, outlayOperatingActivities,
+                        amortization, avgStaffNumber, investmentsEquipment, earningsExportTolling);
+
+                financialReport.setId(databaseId);
+                financialReportsList.add(financialReport);
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return financialReportsList;
     }
 }

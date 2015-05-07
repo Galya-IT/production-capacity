@@ -4,12 +4,10 @@ package com.galya.business.productioncapacity.model;
  * Currency is BGN.
  */
 public enum CompanyCategory {
-    // TODO: find the upperLimit for AVERAGE
     BELOW_MICRO(0, "Под микро", 0, 199999, 0, 0),
     MICRO(1, "Микро", 200000, 999999, 100000, 500000),
     SMALL(2, "Малко", 1000000, 5999999, 200000, 750000),
-    AVERAGE(3, "Средно", 6000000, Integer.MAX_VALUE - 1, 300000, 1000000),
-    ABOVE_AVERAGE(4, "Над средно", Integer.MAX_VALUE, Integer.MAX_VALUE, 0, 0);
+    AVERAGE(3, "Средно", 6000000, Integer.MAX_VALUE, 300000, 1000000);
 
     private String stringRepresenatation;
     private int id;
@@ -33,9 +31,6 @@ public enum CompanyCategory {
             case ("Средно"):
                 companyCategory = AVERAGE;
                 break;
-            case ("Над средно"):
-                companyCategory = ABOVE_AVERAGE;
-                break;
         }
         return companyCategory;
     }
@@ -55,9 +50,6 @@ public enum CompanyCategory {
             case 3:
                 category = AVERAGE;
                 break;
-            case 4:
-                category = ABOVE_AVERAGE;
-                break;
         }
         return category;
     }
@@ -71,9 +63,7 @@ public enum CompanyCategory {
     public static CompanyCategory getByNetSales(double netSalesLastThreeYears) {
         CompanyCategory category = null;
 
-        if (netSalesLastThreeYears > AVERAGE.getUpperLimit()) {
-            category = ABOVE_AVERAGE;
-        } else if (netSalesLastThreeYears > SMALL.getUpperLimit()) {
+        if (netSalesLastThreeYears > SMALL.getUpperLimit()) {
             category = AVERAGE;
         } else if (netSalesLastThreeYears > MICRO.getUpperLimit()) {
             category = SMALL;

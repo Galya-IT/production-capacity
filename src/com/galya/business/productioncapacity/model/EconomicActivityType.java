@@ -4,23 +4,23 @@ import static com.galya.business.productioncapacity.utils.CommonUtils.*;
 
 public abstract class EconomicActivityType {
 
-    private int databaseId;
+    private long databaseId;
     private String id;
     private String name;
     private String parentId;
 
-    public EconomicActivityType(int databaseId, String id, String name) {
+    public EconomicActivityType(long databaseId, String id, String name) {
         this.databaseId = databaseId;
         this.id = id;
         this.name = name;
     }
 
-    public EconomicActivityType(int databaseId, String id, String name, String parentId) {
+    public EconomicActivityType(long databaseId, String id, String name, String parentId) {
         this(databaseId, id, name);
         this.parentId = parentId;
     }
 
-    public int getDatabaseId() {
+    public long getDatabaseId() {
         return databaseId;
     }
 
@@ -36,7 +36,7 @@ public abstract class EconomicActivityType {
         return parentId;
     }
 
-    public void setDatabaseId(int databaseId) {
+    public void setDatabaseId(long databaseId) {
         this.databaseId = databaseId;
     }
 

@@ -11,6 +11,7 @@ import java.awt.event.ActionListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.File;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -161,15 +162,10 @@ public class ClientTab extends Tab implements FinancialReportsModuleEventListene
         public static final int RIGHT_PADDING = 5;
     }
 
-    public ClientTab(JFrame parentFrame, Client oldClient) {
-        super(parentFrame, (oldClient == null) ? NEW_CLIENT_LABEL : oldClient.getName(), TAB_LABEL_WIDTH, ICON,
+    public ClientTab(JFrame parentFrame, Client passedClient) {
+        super(parentFrame, (passedClient == null) ? NEW_CLIENT_LABEL : passedClient.getName(), TAB_LABEL_WIDTH, ICON,
                 IS_CLOSEABLE);
-
-        if (oldClient != null) {
-            isOldClient = true;
-            loadOldClient(oldClient);
-        }
-
+        
         mainPanel = new ScrollablePanel(false);
         GridBagLayout layout = new GridBagLayout();
         mainPanel.setLayout(layout);
@@ -210,11 +206,11 @@ public class ClientTab extends Tab implements FinancialReportsModuleEventListene
                 String minAmountFundingText;
                 String maxAmountFundingText;
 
-                String categoryText = categoryCompany.getText();
+                String currentCategoryTextDisplayed = categoryCompany.getText();
 
                 CompanyCategory category = null;
-                if (categoryText != DEFAULT_CATEGORY_COMPANY_LABEL) {
-                    category = CompanyCategory.getByText(categoryText);
+                if (currentCategoryTextDisplayed != DEFAULT_CATEGORY_COMPANY_LABEL) {
+                    category = CompanyCategory.getByText(currentCategoryTextDisplayed);
                     minAmountFundingText = String.valueOf(category.getMinFundingAmount());
                     maxAmountFundingText = String.valueOf(category.getMaxFundingAmount());
                 } else {
@@ -280,18 +276,84 @@ public class ClientTab extends Tab implements FinancialReportsModuleEventListene
         });
 
         financialReportsModule.registerListener(this, FinancialReportsModuleEventType.NET_SALES_CHANGED);
+
         setBaseComponent(mainPanel);
+
+        if (passedClient != null) {
+            isOldClient = true;
+            loadClient(passedClient);
+        }
+    }
+    
+    public void loadClient(Client client) {
+        oldClient = client;
+        
+        nameField.setText(oldClient.getName());
+        bulstatField.setText(oldClient.getBulstat());
+        seatAddressField.setText(oldClient.getSeatAddress());
+        if (oldClient.getEconomicActivitySection() != null) {
+            economicActivitySectionsComboBox.setSelectedItem(oldClient.getEconomicActivitySection());
+        }
+        if (oldClient.getEconomicActivityDivision() != null) {
+            economicActivityDivisionsComboBox.setSelectedItem(oldClient.getEconomicActivityDivision());
+        }
+        if (oldClient.getEconomicActivityGroup() != null) {
+            economicActivityGroupsComboBox.setSelectedItem(oldClient.getEconomicActivityGroup());
+        }
+        if (oldClient.getEconomicActivityClass() != null) {
+            economicActivityClassesComboBox.setSelectedItem(oldClient.getEconomicActivityClass());
+        }
+        if (oldClient.getInvestmentRegion() != null) {
+            regionComboBox.setSelectedItem(oldClient.getInvestmentRegion());
+        }
+        if (oldClient.getInvestmentDistrict() != null) {
+            districtComboBox.setSelectedItem(oldClient.getInvestmentDistrict());
+        }
+        if (oldClient.getInvestmentMunicipality() != null) {
+            municipalityComboBox.setSelectedItem(oldClient.getInvestmentMunicipality());
+        }
+        
+        investitionAddressField.setText(oldClient.getInvestmentAddress());
+        
+        financialReportsModule.setFinancialReports(oldClient.getThreeYearsBackReport(), oldClient.getTwoYearsBackReport(), oldClient.getLastYearReport());
+
+        Date firstDocumentsReceptionDate = oldClient.getFirstDocumentsReceptionDate();
+        if (firstDocumentsReceptionDate != null && firstDocumentsReceptionDate.getTime() > 0) {
+            Calendar firstDocumentsReceptionDateCalendar = Calendar.getInstance();
+            firstDocumentsReceptionDateCalendar.setTime(firstDocumentsReceptionDate);
+            int firstDocumentsReceptionDateYear = firstDocumentsReceptionDateCalendar.get(Calendar.YEAR);
+            int firstDocumentsReceptionDateMonth = firstDocumentsReceptionDateCalendar.get(Calendar.MONTH);
+            int firstDocumentsReceptionDateDate = firstDocumentsReceptionDateCalendar.get(Calendar.DATE);
+            
+            startDatePicker.getModel().setDate(firstDocumentsReceptionDateYear, firstDocumentsReceptionDateMonth, firstDocumentsReceptionDateDate);
+        }
+        
+        Date lastDocumentsReceptionDate = oldClient.getLastDocumentsReceptionDate();
+        if (lastDocumentsReceptionDate != null && lastDocumentsReceptionDate.getTime() > 0) {
+            Calendar lastDocumentsReceptionDateCalendar = Calendar.getInstance();
+            lastDocumentsReceptionDateCalendar.setTime(lastDocumentsReceptionDate);
+            int lastDocumentsReceptionDateYear = lastDocumentsReceptionDateCalendar.get(Calendar.YEAR);
+            int lastDocumentsReceptionDateMonth = lastDocumentsReceptionDateCalendar.get(Calendar.MONTH);
+            int lasttDocumentsReceptionDateDate = lastDocumentsReceptionDateCalendar.get(Calendar.DATE);
+            
+            endDatePicker.getModel().setDate(lastDocumentsReceptionDateYear, lastDocumentsReceptionDateMonth, lasttDocumentsReceptionDateDate);
+        }
+        
+        notesTextArea.setText(oldClient.getNotes());
+        wholeInvestitionAmount.setText(oldClient.getWholeInvestitionAmount());
+        standards.setText(oldClient.getStandards());
+        softwareSystems.setText(oldClient.getSoftwareSystems());
+        otherCompaniesConnections.setText(oldClient.getOtherCompaniesConnections());
     }
 
     @Override
     public void handleFinancialReportEvent(FinancialReportsModuleEventType eventType) {
+        
         if (eventType == FinancialReportsModuleEventType.NET_SALES_CHANGED) {
-
             double netSalesThreeYearsAgoDouble = financialReportsModule.getNetSalesThreeYearsAgo();
             double netSalesTwoYearsAgoDouble = financialReportsModule.getNetSalesTwoYearsAgo();
             double netSalesLastYearDouble = financialReportsModule.getNetSalesLastYear();
 
-            // TODO: if (all 3 != 0) ???
             if (netSalesThreeYearsAgoDouble != FinancialReportsModule.INVALID_VALUE
                     && netSalesTwoYearsAgoDouble != FinancialReportsModule.INVALID_VALUE
                     && netSalesLastYearDouble != FinancialReportsModule.INVALID_VALUE) {
@@ -311,6 +373,14 @@ public class ClientTab extends Tab implements FinancialReportsModuleEventListene
                 }
             }
         }
+    }
+    
+    public long getClientId() {
+        long id = -1;
+        if (oldClient != null) {
+            id = oldClient.getId();
+        }
+        return id;
     }
 
     private void setMaxPercentageFunding(String region) {
@@ -514,6 +584,9 @@ public class ClientTab extends Tab implements FinancialReportsModuleEventListene
     }
 
     private void save() {
+        //LoadingDataDialog loadingDataDialog = new LoadingDataDialog();
+        //loadingDataDialog.setVisible();
+        
         String companyName = nameField.getText();
         if (handleTooLongShortTextError(companyName, nameLabel.getText())) {
             return;
@@ -563,7 +636,6 @@ public class ClientTab extends Tab implements FinancialReportsModuleEventListene
         }
 
         String notes = notesTextArea.getText();
-        CompanyCategory category = CompanyCategory.getByText(categoryCompany.getText());
 
         String wholeInvestitionAmountString = wholeInvestitionAmount.getText();
         String standardsString = standards.getText();
@@ -587,7 +659,7 @@ public class ClientTab extends Tab implements FinancialReportsModuleEventListene
             Client newClient = new Client(companyName, bulstat, seatAddress, economicActivitySection,
                     economicActivityDivision, economicActivityGroup, economicActivityClass, investmentRegion,
                     investmentDistrict, investmentMunicipality, investmentAddress, firstDocumentsReceptionDate,
-                    lastDocumentsReceptionDate, notes, category, wholeInvestitionAmountString, standardsString,
+                    lastDocumentsReceptionDate, notes, wholeInvestitionAmountString, standardsString,
                     softwareSystemsString, otherCompaniesConnectionsString);
 
             long clientId = ClientTableHelper.getInstance().addClient(newClient);
@@ -626,7 +698,6 @@ public class ClientTab extends Tab implements FinancialReportsModuleEventListene
             oldClient.setFirstDocumentsReceptionDate(firstDocumentsReceptionDate);
             oldClient.setLastDocumentsReceptionDate(lastDocumentsReceptionDate);
             oldClient.setNotes(notes);
-            oldClient.setCategory(category);
             oldClient.setWholeInvestitionAmount(wholeInvestitionAmountString);
             oldClient.setStandards(standardsString);
             oldClient.setSoftwareSystems(softwareSystemsString);
@@ -648,6 +719,8 @@ public class ClientTab extends Tab implements FinancialReportsModuleEventListene
 
         /*Set<File> files = new HashSet<File>();
         currentClient.setFiles(files);*/
+        
+        //loadingDataDialog.setInvisible();
     }
 
     private boolean handleTooLongShortTextError(String text, String fieldLabel) {
@@ -660,7 +733,4 @@ public class ClientTab extends Tab implements FinancialReportsModuleEventListene
         return isError;
     }
 
-    private void loadOldClient(Client client) {
-
-    }
 }

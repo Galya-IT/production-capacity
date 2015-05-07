@@ -33,24 +33,24 @@ public class FinancialReportsModule {
     private JLabel lastYearLabel;
 
     private JLabel assetsSumLabel = generateLabel("Сума на актива:");
-    private JFormattedTextField assetsSumThreeYearsAgo = generateNumericField(0);
-    private JFormattedTextField assetsSumTwoYearsAgo = generateNumericField(0);
-    private JFormattedTextField assetsSumLastYear = generateNumericField(0);
+    private JFormattedTextField assetsSumThreeYearsAgo = generateNumericField();
+    private JFormattedTextField assetsSumTwoYearsAgo = generateNumericField();
+    private JFormattedTextField assetsSumLastYear = generateNumericField();
 
     private JLabel netProfitLabel = generateLabel("Нетна печалба/нетен финансов резултат:");
-    private JFormattedTextField netProfitThreeYearsAgo = generateNumericField(0);
-    private JFormattedTextField netProfitTwoYearsAgo = generateNumericField(0);
-    private JFormattedTextField netProfitLastYear = generateNumericField(0);
+    private JFormattedTextField netProfitThreeYearsAgo = generateNumericField();
+    private JFormattedTextField netProfitTwoYearsAgo = generateNumericField();
+    private JFormattedTextField netProfitLastYear = generateNumericField();
 
     private JLabel equityLabel = generateLabel("Собствен капитал:");
-    private JFormattedTextField equityThreeYearsAgo = generateNumericField(0);
-    private JFormattedTextField equityTwoYearsAgo = generateNumericField(0);
-    private JFormattedTextField equityLastYear = generateNumericField(0);
+    private JFormattedTextField equityThreeYearsAgo = generateNumericField();
+    private JFormattedTextField equityTwoYearsAgo = generateNumericField();
+    private JFormattedTextField equityLastYear = generateNumericField();
 
     private JLabel liabilitiesProvisionsLabel = generateLabel("Общо задължения и провизии - 06000+07000:");
-    private JFormattedTextField liabilitiesProvisionsThreeYearsAgo = generateNumericField(0);
-    private JFormattedTextField liabilitiesProvisionsTwoYearsAgo = generateNumericField(0);
-    private JFormattedTextField liabilitiesProvisionsLastYear = generateNumericField(0);
+    private JFormattedTextField liabilitiesProvisionsThreeYearsAgo = generateNumericField();
+    private JFormattedTextField liabilitiesProvisionsTwoYearsAgo = generateNumericField();
+    private JFormattedTextField liabilitiesProvisionsLastYear = generateNumericField();
 
     private JLabel netSalesIncomeLabel = generateLabel("Нетни приходи от продажби:");
     private JFormattedTextField netSalesThreeYearsAgo;
@@ -58,34 +58,34 @@ public class FinancialReportsModule {
     private JFormattedTextField netSalesLastYear;
 
     private JLabel incomeOperatingActivitiesLabel = generateLabel("Общи приходи от оперативна дейност:");
-    private JFormattedTextField incomeOperatingActivitiesThreeYearsAgo = generateNumericField(0);
-    private JFormattedTextField incomeOperatingActivitiesTwoYearsAgo = generateNumericField(0);
-    private JFormattedTextField incomeOperatingActivitiesLastYear = generateNumericField(0);
+    private JFormattedTextField incomeOperatingActivitiesThreeYearsAgo = generateNumericField();
+    private JFormattedTextField incomeOperatingActivitiesTwoYearsAgo = generateNumericField();
+    private JFormattedTextField incomeOperatingActivitiesLastYear = generateNumericField();
 
     private JLabel outlayOperatingActivitiesLabel = generateLabel("Общо разходи за оперативна дейност:");
-    private JFormattedTextField outlayOperatingActivitiesThreeYearsAgo = generateNumericField(0);
-    private JFormattedTextField outlayOperatingActivitiesTwoYearsAgo = generateNumericField(0);
-    private JFormattedTextField outlayOperatingActivitiesLastYear = generateNumericField(0);
+    private JFormattedTextField outlayOperatingActivitiesThreeYearsAgo = generateNumericField();
+    private JFormattedTextField outlayOperatingActivitiesTwoYearsAgo = generateNumericField();
+    private JFormattedTextField outlayOperatingActivitiesLastYear = generateNumericField();
 
     private JLabel amortizationLabel = generateLabel("Разходи за амортизации:");
-    private JFormattedTextField amortizationThreeYearsAgo = generateNumericField(0);
-    private JFormattedTextField amortizationTwoYearsAgo = generateNumericField(0);
-    private JFormattedTextField amortizationLastYear = generateNumericField(0);
+    private JFormattedTextField amortizationThreeYearsAgo = generateNumericField();
+    private JFormattedTextField amortizationTwoYearsAgo = generateNumericField();
+    private JFormattedTextField amortizationLastYear = generateNumericField();
 
     private JLabel avgStaffNumberLabel = generateLabel("Средно списъчен брой на персонала:");
-    private JFormattedTextField avgStaffNumberThreeYearsAgo = generateNumericField(0);
-    private JFormattedTextField avgStaffNumberTwoYearsAgo = generateNumericField(0);
-    private JFormattedTextField avgStaffNumberLastYear = generateNumericField(0);
+    private JFormattedTextField avgStaffNumberThreeYearsAgo = generateNumericField();
+    private JFormattedTextField avgStaffNumberTwoYearsAgo = generateNumericField();
+    private JFormattedTextField avgStaffNumberLastYear = generateNumericField();
 
     private JLabel investmentsEquipmentLabel = generateLabel("Реализирани инвестиции в машини и съоръжения:");
-    private JFormattedTextField investmentsEquipmentThreeYearsAgo = generateNumericField(0);
-    private JFormattedTextField investmentsEquipmentTwoYearsAgo = generateNumericField(0);
-    private JFormattedTextField investmentsEquipmentLastYear = generateNumericField(0);
+    private JFormattedTextField investmentsEquipmentThreeYearsAgo = generateNumericField();
+    private JFormattedTextField investmentsEquipmentTwoYearsAgo = generateNumericField();
+    private JFormattedTextField investmentsEquipmentLastYear = generateNumericField();
 
     private JLabel earningsExportTollingLabel = generateLabel("Приходи от износ и ишлеме:");
-    private JFormattedTextField earningsExportTollingThreeYearsAgo = generateNumericField(0);
-    private JFormattedTextField earningsExportTollingTwoYearsAgo = generateNumericField(0);
-    private JFormattedTextField earningsExportTollingLastYear = generateNumericField(0);
+    private JFormattedTextField earningsExportTollingThreeYearsAgo = generateNumericField();
+    private JFormattedTextField earningsExportTollingTwoYearsAgo = generateNumericField();
+    private JFormattedTextField earningsExportTollingLastYear = generateNumericField();
 
     private Map<FinancialReportsModuleEventType, HashSet<FinancialReportsModuleEventListener>> eventTypeEventListenersPairs = new HashMap<FinancialReportsModuleEventType, HashSet<FinancialReportsModuleEventListener>>();
 
@@ -115,9 +115,9 @@ public class FinancialReportsModule {
                 emitEvent(FinancialReportsModuleEventType.NET_SALES_CHANGED);
             }
         };
-        netSalesThreeYearsAgo = generateNumericField(0, true, focusLostRunnable);
-        netSalesTwoYearsAgo = generateNumericField(0, true, focusLostRunnable);
-        netSalesLastYear = generateNumericField(0, true, focusLostRunnable);
+        netSalesThreeYearsAgo = generateNumericField(true, focusLostRunnable);
+        netSalesTwoYearsAgo = generateNumericField(true, focusLostRunnable);
+        netSalesLastYear = generateNumericField(true, focusLostRunnable);
     }
 
     public double getNetSalesLastYear() {
@@ -154,6 +154,48 @@ public class FinancialReportsModule {
         }
 
         return netSalesDouble;
+    }
+    
+    public void setFinancialReports(FinancialReport reportThreeYearsBack, FinancialReport reportTwoYearsBack, FinancialReport reportLastYear) {
+        threeYearsBackYearComboBox.setSelectedItem(reportThreeYearsBack.getYear());
+        
+        assetsSumThreeYearsAgo.setValue(reportThreeYearsBack.getAssetsSum());
+        netProfitThreeYearsAgo.setValue(reportThreeYearsBack.getNetProfit());
+        equityThreeYearsAgo.setValue(reportThreeYearsBack.getEquity());
+        liabilitiesProvisionsThreeYearsAgo.setValue(reportThreeYearsBack.getLiabilitiesProvisions());
+        netSalesThreeYearsAgo.setValue(reportThreeYearsBack.getNetSales());
+        incomeOperatingActivitiesThreeYearsAgo.setValue(reportThreeYearsBack.getIncomeOperatingActivities());
+        outlayOperatingActivitiesThreeYearsAgo.setValue(reportThreeYearsBack.getOutlayOperatingActivities());
+        amortizationThreeYearsAgo.setValue(reportThreeYearsBack.getAmortization());
+        avgStaffNumberThreeYearsAgo.setValue(reportThreeYearsBack.getAvgStaffNumber());
+        investmentsEquipmentThreeYearsAgo.setValue(reportThreeYearsBack.getInvestmentsEquipment());
+        earningsExportTollingThreeYearsAgo.setValue(reportThreeYearsBack.getEarningsExportTolling());
+
+        assetsSumTwoYearsAgo.setValue(reportTwoYearsBack.getAssetsSum());
+        netProfitTwoYearsAgo.setValue(reportTwoYearsBack.getNetProfit());
+        equityTwoYearsAgo.setValue(reportTwoYearsBack.getEquity());
+        liabilitiesProvisionsTwoYearsAgo.setValue(reportTwoYearsBack.getLiabilitiesProvisions());
+        netSalesTwoYearsAgo.setValue(reportTwoYearsBack.getNetSales());
+        incomeOperatingActivitiesTwoYearsAgo.setValue(reportTwoYearsBack.getIncomeOperatingActivities());
+        outlayOperatingActivitiesTwoYearsAgo.setValue(reportTwoYearsBack.getOutlayOperatingActivities());
+        amortizationTwoYearsAgo.setValue(reportTwoYearsBack.getAmortization());
+        avgStaffNumberTwoYearsAgo.setValue(reportTwoYearsBack.getAvgStaffNumber());
+        investmentsEquipmentTwoYearsAgo.setValue(reportTwoYearsBack.getInvestmentsEquipment());
+        earningsExportTollingTwoYearsAgo.setValue(reportTwoYearsBack.getEarningsExportTolling());
+
+        assetsSumLastYear.setValue(reportLastYear.getAssetsSum());
+        netProfitLastYear.setValue(reportLastYear.getNetProfit());
+        equityLastYear.setValue(reportLastYear.getEquity());
+        liabilitiesProvisionsLastYear.setValue(reportLastYear.getLiabilitiesProvisions());
+        netSalesLastYear.setValue(reportLastYear.getNetSales());
+        incomeOperatingActivitiesLastYear.setValue(reportLastYear.getIncomeOperatingActivities());
+        outlayOperatingActivitiesLastYear.setValue(reportLastYear.getOutlayOperatingActivities());
+        amortizationLastYear.setValue(reportLastYear.getAmortization());
+        avgStaffNumberLastYear.setValue(reportLastYear.getAvgStaffNumber());
+        investmentsEquipmentLastYear.setValue(reportLastYear.getInvestmentsEquipment());
+        earningsExportTollingLastYear.setValue(reportLastYear.getEarningsExportTolling());
+        
+        emitEvent(FinancialReportsModuleEventType.NET_SALES_CHANGED);
     }
 
     public void addToLayout(GridBagLayoutBuffer layoutBuffer) {

@@ -57,12 +57,12 @@ public class EconomicActivityComboBox<T extends EconomicActivityType> extends JC
     private void setDefaultOption(Class<T> clazz) {
         try {
             try {
-                Constructor<T> constructor = clazz.getConstructor(Integer.class, String.class, String.class,
+                Constructor<T> constructor = clazz.getConstructor(Long.class, String.class, String.class,
                         String.class);
-                defaultOption = constructor.newInstance(-1, null, DEFAULT_OPTION, null);
+                defaultOption = constructor.newInstance(-1L, null, DEFAULT_OPTION, null);
             } catch (NoSuchMethodException e) {
-                Constructor<T> constructor = clazz.getConstructor(Integer.class, String.class, String.class);
-                defaultOption = constructor.newInstance(-1, null, DEFAULT_OPTION);
+                Constructor<T> constructor = clazz.getConstructor(Long.class, String.class, String.class);
+                defaultOption = constructor.newInstance(-1L, null, DEFAULT_OPTION);
             }
         } catch (Exception e) {
             System.err.println("No default option could be initialized for " + this.getClass());

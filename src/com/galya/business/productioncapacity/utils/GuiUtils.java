@@ -11,16 +11,20 @@ import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.SwingUtilities;
 
+import com.galya.business.productioncapacity.components.misc.TabsContainer;
+
 public class GuiUtils {
 
     public static JFrame getParentFrame(Component component) {
         return (JFrame) SwingUtilities.getAncestorOfClass(JFrame.class, component);
+    }
 
-        /*        Container parent = component.getParent();
-                while (!(parent instanceof JFrame)) {
-                    parent = parent.getParent();
-                }
-                return ((JFrame) parent);*/
+    public static TabsContainer getParentTabsContainer(Component component) {
+        Component parent = component.getParent();
+        while (parent != null && !(parent instanceof TabsContainer)) {
+            parent = parent.getParent();
+        }
+        return ((TabsContainer) parent);
     }
 
     public static void closeApp(Component component) {
@@ -50,7 +54,7 @@ public class GuiUtils {
     /** Returns an ImageIcon, or null if the path was invalid. */
     public static ImageIcon createImageIcon(String path) {
         URL imgURL = GuiUtils.class.getResource(path);
-        
+
         if (imgURL != null) {
             return new ImageIcon(imgURL);
         } else {

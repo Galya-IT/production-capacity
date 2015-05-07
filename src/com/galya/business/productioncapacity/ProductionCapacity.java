@@ -30,6 +30,9 @@ import com.galya.business.productioncapacity.screens.LoginScreen;
 import com.galya.business.productioncapacity.screens.MainScreen;
 
 public class ProductionCapacity {
+    
+    public static final int MIN_FRAME_WIDTH = 500;
+    public static final int MIN_FRAME_HEIGHT = 350;
 
     private static final String APP_TITLE = "Подобряване на производствения капацитет в МСП";
 
@@ -130,7 +133,7 @@ public class ProductionCapacity {
         };
         mainFrame.addWindowListener(exitListener);
         mainFrame.setExtendedState(Frame.MAXIMIZED_BOTH);
-        mainFrame.setMinimumSize(new Dimension(500, 350));
+        mainFrame.setMinimumSize(new Dimension(MIN_FRAME_WIDTH, MIN_FRAME_HEIGHT));
         ImageIcon appLaunchIcon = new ImageIcon(APP_ICON_PATH);
         mainFrame.setIconImage(appLaunchIcon.getImage());
         mainFrame.setTitle(APP_TITLE);

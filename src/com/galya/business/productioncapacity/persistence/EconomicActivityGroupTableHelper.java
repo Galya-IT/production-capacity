@@ -81,7 +81,7 @@ public class EconomicActivityGroupTableHelper implements TableHelper {
             ResultSet rs = stmt.executeQuery();
 
             while (rs.next()) {
-                int databaseId = rs.getInt(EA_GROUP_TABLE_ID);
+                long databaseId = rs.getInt(EA_GROUP_TABLE_ID);
                 String divisionId = rs.getString(EA_GROUP_TABLE_GROUP_ID);
                 String divisionName = rs.getString(EA_GROUP_TABLE_GROUP_NAME);
                 String groupId = rs.getString(EA_GROUP_TABLE_DIVISION_ID);
@@ -107,7 +107,7 @@ public class EconomicActivityGroupTableHelper implements TableHelper {
             ResultSet rs = stmt.executeQuery();
 
             while (rs.next()) {
-                int databaseId = rs.getInt(EA_GROUP_TABLE_ID);
+                long databaseId = rs.getInt(EA_GROUP_TABLE_ID);
                 String groupId = rs.getString(EA_GROUP_TABLE_GROUP_ID);
                 String groupName = rs.getString(EA_GROUP_TABLE_GROUP_NAME);
                 EconomicActivityGroup currentClass = new EconomicActivityGroup(databaseId, groupId, groupName,
@@ -120,5 +120,30 @@ public class EconomicActivityGroupTableHelper implements TableHelper {
             e.printStackTrace();
         }
         return groupsBySectionId;
+    }
+
+    public EconomicActivityGroup getByGroupId(String groupId) {
+        EconomicActivityGroup group = null;
+
+        try (Connection connection = ProductionCapacityDatabaseManager.getConnection();) {
+            PreparedStatement stmt = connection.prepareStatement("SELECT * FROM " + EA_GROUP_TABLE + " WHERE "
+                    + EA_GROUP_TABLE_GROUP_ID + "=?");
+            stmt.setString(1, groupId);
+
+            ResultSet rs = stmt.executeQuery();
+
+            boolean isAnyResult = rs.next();
+            if (isAnyResult) {
+                group = new EconomicActivityGroup(rs.getLong(EA_GROUP_TABLE_ID), groupId,
+                        rs.getString(EA_GROUP_TABLE_GROUP_NAME), rs.getString(EA_GROUP_TABLE_DIVISION_ID));
+            }
+
+            rs.close();
+            stmt.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return group;
     }
 }

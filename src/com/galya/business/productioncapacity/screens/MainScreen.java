@@ -8,13 +8,18 @@ import javax.swing.JMenuBar;
 
 import com.galya.business.productioncapacity.components.MainTabbedPane;
 import com.galya.business.productioncapacity.components.menu.MainMenuBar;
+import com.galya.business.productioncapacity.components.misc.OpenClientTabListener;
 import com.galya.business.productioncapacity.components.misc.TabsContainer;
 import com.galya.business.productioncapacity.components.tabs.ClientTab;
+import com.galya.business.productioncapacity.components.tabs.MainTab;
 import com.galya.business.productioncapacity.components.tabs.Tab;
-import com.galya.business.productioncapacity.components.tabs.TestTab;
+import com.galya.business.productioncapacity.model.Client;
 import com.galya.business.productioncapacity.utils.GuiUtils;
 
-public class MainScreen implements Screen, TabsContainer {
+/**
+ * TabsContainer implemented to provide public interface for adding new tabs.
+ */
+public class MainScreen implements Screen, TabsContainer, OpenClientTabListener {
 
     private JMenuBar menuBar;
     private MainTabbedPane mainTabbedPane;
@@ -23,12 +28,9 @@ public class MainScreen implements Screen, TabsContainer {
         menuBar = new MainMenuBar(mainMenuActionListener);
         frame.setJMenuBar(menuBar);
 
-        mainTabbedPane = new MainTabbedPane();
+        mainTabbedPane = new MainTabbedPane(frame, BorderLayout.NORTH);
 
-        addNewTab(new TestTab(frame));
-        addNewTab(new ClientTab(frame, null));
-
-        frame.add(mainTabbedPane, BorderLayout.NORTH);
+        addNewTab(new MainTab(frame));
     }
 
     @Override
@@ -52,10 +54,22 @@ public class MainScreen implements Screen, TabsContainer {
 
     @Override
     public void addNewTab(Tab tab) {
+        if (tab instanceof MainTab) {
+            ((MainTab) tab).setOpenClientTabListener(this);
+        }
+        
         mainTabbedPane.addNewTab(tab);
     }
-
-    public void addTabNewBusiness() {
-
+    
+    @Override
+    public void onOpenClientTabEvent(Client client) {
+        JFrame parentFrame = GuiUtils.getParentFrame(menuBar);
+        int tabPosition = mainTabbedPane.getTabPositionByLabelText(client.getName());
+        
+        if (tabPosition == MainTabbedPane.DEFAULT_INVALID_TAB_POSITION) {
+            mainTabbedPane.addNewTab(new ClientTab(parentFrame, client));
+        } else {
+            mainTabbedPane.setSelectedTab(tabPosition);
+        }
     }
 }

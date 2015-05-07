@@ -78,7 +78,7 @@ public class EconomicActivitySectionTableHelper implements TableHelper {
             ResultSet rs = stmt.executeQuery();
 
             while (rs.next()) {
-                int databaseId = rs.getInt(EA_SECTION_TABLE_ID);
+                long databaseId = rs.getInt(EA_SECTION_TABLE_ID);
                 String sectionId = rs.getString(EA_SECTION_TABLE_SECTION_ID);
                 String sectionName = rs.getString(EA_SECTION_TABLE_SECTION_NAME);
                 EconomicActivitySection currentSection = new EconomicActivitySection(databaseId, sectionId, sectionName);
@@ -90,6 +90,29 @@ public class EconomicActivitySectionTableHelper implements TableHelper {
             e.printStackTrace();
         }
         return allSections;
+    }
+    
+    public EconomicActivitySection getBySectionId(String sectionId) {
+        EconomicActivitySection section = null;
+        
+        try (Connection connection = ProductionCapacityDatabaseManager.getConnection();) {
+            PreparedStatement stmt = connection.prepareStatement("SELECT * FROM " + EA_SECTION_TABLE + " WHERE " + EA_SECTION_TABLE_SECTION_ID + "=?");
+            stmt.setString(1, sectionId);
+            
+            ResultSet rs = stmt.executeQuery();
+
+            boolean isAnyResult = rs.next();
+            if (isAnyResult) {
+                section = new EconomicActivitySection(rs.getLong(EA_SECTION_TABLE_ID), sectionId, rs.getString(EA_SECTION_TABLE_SECTION_NAME));
+            }
+            
+            rs.close();
+            stmt.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        
+        return section;
     }
 
 }

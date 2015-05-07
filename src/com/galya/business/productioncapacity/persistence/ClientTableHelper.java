@@ -9,8 +9,14 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.Types;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.Date;
+import java.util.List;
 
 import com.galya.business.productioncapacity.model.Client;
+import com.galya.business.productioncapacity.model.FinancialReport;
 
 public class ClientTableHelper implements TableHelper {
 
@@ -32,7 +38,6 @@ public class ClientTableHelper implements TableHelper {
     private static final String CLIENT_TABLE_FIRST_RECEPTION_DATE = "first_documents_reception_date_timestamp";
     private static final String CLIENT_TABLE_LAST_RECEPTION_DATE = "last_documents_Reception_date_timestamp";
     private static final String CLIENT_TABLE_NOTES = "notes";
-    private static final String CLIENT_TABLE_CATEGORY_ID = "category_id";
     private static final String CLIENT_TABLE_WHOLE_INV_AMOUNT = "whole_investition_amount";
     private static final String CLIENT_TABLE_STANDARDS = "standards";
     private static final String CLIENT_TABLE_SOFTWARE_SYSTEMS = "software_systems";
@@ -58,7 +63,6 @@ public class ClientTableHelper implements TableHelper {
             + CLIENT_TABLE_FIRST_RECEPTION_DATE + " integer, "
             + CLIENT_TABLE_LAST_RECEPTION_DATE + " integer, "
             + CLIENT_TABLE_NOTES + " varchar, "
-            + CLIENT_TABLE_CATEGORY_ID + " integer, "
             + CLIENT_TABLE_WHOLE_INV_AMOUNT + TABLE_CREATION_QUERY_TYPE_VARCHAR + ", "
             + CLIENT_TABLE_STANDARDS + TABLE_CREATION_QUERY_TYPE_VARCHAR + ", "
             + CLIENT_TABLE_SOFTWARE_SYSTEMS + TABLE_CREATION_QUERY_TYPE_VARCHAR + ", "
@@ -118,12 +122,11 @@ public class ClientTableHelper implements TableHelper {
                     + CLIENT_TABLE_FIRST_RECEPTION_DATE + ", "
                     + CLIENT_TABLE_LAST_RECEPTION_DATE + ", "
                     + CLIENT_TABLE_NOTES + ", "
-                    + CLIENT_TABLE_CATEGORY_ID + ", "
                     + CLIENT_TABLE_WHOLE_INV_AMOUNT + ", "
                     + CLIENT_TABLE_STANDARDS + ", "
                     + CLIENT_TABLE_SOFTWARE_SYSTEMS + ", "
                     + CLIENT_TABLE_COMPANIES_CONNECTIONS + ") "
-                    + "VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+                    + "VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
             // @formatter:on
 
             PreparedStatement statement = connection.prepareStatement(insertNewClientQuery,
@@ -183,24 +186,20 @@ public class ClientTableHelper implements TableHelper {
                 statement.setString(14, client.getNotes());
             }
 
-            if (client.getCategory() != null) {
-                statement.setInt(15, client.getCategory().getId());
-            }
-
             if (!isEmpty(client.getWholeInvestitionAmount())) {
-                statement.setString(16, client.getWholeInvestitionAmount());
+                statement.setString(15, client.getWholeInvestitionAmount());
             }
 
             if (!isEmpty(client.getStandards())) {
-                statement.setString(17, client.getStandards());
+                statement.setString(16, client.getStandards());
             }
 
             if (!isEmpty(client.getSoftwareSystems())) {
-                statement.setString(18, client.getSoftwareSystems());
+                statement.setString(17, client.getSoftwareSystems());
             }
 
             if (!isEmpty(client.getOtherCompaniesConnections())) {
-                statement.setString(19, client.getOtherCompaniesConnections());
+                statement.setString(18, client.getOtherCompaniesConnections());
             }
 
             statement.execute();
@@ -222,7 +221,7 @@ public class ClientTableHelper implements TableHelper {
 
     public boolean updateClient(Client client) {
         boolean isSuccessful = false;
-        
+
         try (Connection connection = ProductionCapacityDatabaseManager.getConnection();) {
             // @formatter:off
             String updateOldClientQuery = "UPDATE " + CLIENT_TABLE + " SET "
@@ -240,7 +239,6 @@ public class ClientTableHelper implements TableHelper {
                     + CLIENT_TABLE_FIRST_RECEPTION_DATE + "=?, "
                     + CLIENT_TABLE_LAST_RECEPTION_DATE + "=?, "
                     + CLIENT_TABLE_NOTES + "=?, "
-                    + CLIENT_TABLE_CATEGORY_ID + "=?, "
                     + CLIENT_TABLE_WHOLE_INV_AMOUNT + "=?, "
                     + CLIENT_TABLE_STANDARDS + "=?, "
                     + CLIENT_TABLE_SOFTWARE_SYSTEMS + "=?, "
@@ -330,48 +328,109 @@ public class ClientTableHelper implements TableHelper {
                 statement.setNull(14, Types.VARCHAR);
             }
 
-            if (client.getCategory() != null) {
-                statement.setInt(15, client.getCategory().getId());
+            if (!isEmpty(client.getWholeInvestitionAmount())) {
+                statement.setString(15, client.getWholeInvestitionAmount());
             } else {
-                statement.setNull(15, Types.INTEGER);
+                statement.setNull(15, Types.VARCHAR);
             }
 
-            if (!isEmpty(client.getWholeInvestitionAmount())) {
-                statement.setString(16, client.getWholeInvestitionAmount());
+            if (!isEmpty(client.getStandards())) {
+                statement.setString(16, client.getStandards());
             } else {
                 statement.setNull(16, Types.VARCHAR);
             }
 
-            if (!isEmpty(client.getStandards())) {
-                statement.setString(17, client.getStandards());
+            if (!isEmpty(client.getSoftwareSystems())) {
+                statement.setString(17, client.getSoftwareSystems());
             } else {
                 statement.setNull(17, Types.VARCHAR);
             }
 
-            if (!isEmpty(client.getSoftwareSystems())) {
-                statement.setString(18, client.getSoftwareSystems());
+            if (!isEmpty(client.getOtherCompaniesConnections())) {
+                statement.setString(18, client.getOtherCompaniesConnections());
             } else {
                 statement.setNull(18, Types.VARCHAR);
             }
 
-            if (!isEmpty(client.getOtherCompaniesConnections())) {
-                statement.setString(19, client.getOtherCompaniesConnections());
-            } else {
-                statement.setNull(19, Types.VARCHAR);
-            }
-
-            statement.setLong(20, client.getId());
+            statement.setLong(19, client.getId());
 
             int affectedRows = statement.executeUpdate();
             if (affectedRows > 0) {
                 isSuccessful = true;
             }
-            
+
             statement.close();
         } catch (SQLException e) {
             e.printStackTrace();
         }
 
         return isSuccessful;
+    }
+
+    public static List<Client> getLastAdded(int number) throws Exception {
+        List<Client> clients = new ArrayList<Client>();
+        
+        try (Connection connection = ProductionCapacityDatabaseManager.getConnection();) {
+            String selectLastAddedQuery = "SELECT * FROM " + CLIENT_TABLE + " ORDER BY " + CLIENT_TABLE_ID + " DESC LIMIT ?";
+            PreparedStatement preparedStatement = connection.prepareStatement(selectLastAddedQuery);
+            preparedStatement.setInt(1, number);
+            ResultSet rs = preparedStatement.executeQuery();
+            
+            while (rs.next()) {
+                String clientName = rs.getString(CLIENT_TABLE_NAME);
+                
+                // @formatter:off
+                Client currentClient = new Client(
+                        clientName,
+                        rs.getString(CLIENT_TABLE_BULSTAT),
+                        rs.getString(CLIENT_TABLE_SEAT),
+                        EconomicActivitySectionTableHelper.getInstance().getBySectionId(rs.getString(CLIENT_TABLE_EA_SECTION_ID)),
+                        EconomicActivityDivisionTableHelper.getInstance().getByDivisionId(rs.getString(CLIENT_TABLE_EA_DIVISION_ID)),
+                        EconomicActivityGroupTableHelper.getInstance().getByGroupId(rs.getString(CLIENT_TABLE_EA_GROUP_ID)),
+                        EconomicActivityClassTableHelper.getInstance().getByClassId(rs.getString(CLIENT_TABLE_EA_CLASS_ID)),
+                        rs.getString(CLIENT_TABLE_INV_REGION),
+                        rs.getString(CLIENT_TABLE_INV_DISTRICT),
+                        rs.getString(CLIENT_TABLE_INV_MUNICIPALITY),
+                        rs.getString(CLIENT_TABLE_INV_ADDRESS),
+                        new Date(rs.getLong(CLIENT_TABLE_FIRST_RECEPTION_DATE)),
+                        new Date(rs.getLong(CLIENT_TABLE_LAST_RECEPTION_DATE)),
+                        rs.getString(CLIENT_TABLE_NOTES),
+                        rs.getString(CLIENT_TABLE_WHOLE_INV_AMOUNT),
+                        rs.getString(CLIENT_TABLE_STANDARDS),
+                        rs.getString(CLIENT_TABLE_SOFTWARE_SYSTEMS),
+                        rs.getString(CLIENT_TABLE_COMPANIES_CONNECTIONS));
+                // @formatter:on
+
+                long clientId = rs.getLong(CLIENT_TABLE_ID);
+                List<FinancialReport> financialReportsList = FinancialReportTableHelper.getInstance().getReportsByClientId(clientId);
+
+                if (financialReportsList.size() < 3) {
+                    throw new Exception("Financial reports for the client are less than 3.");
+                }
+                
+                Collections.sort(financialReportsList, new Comparator<FinancialReport>() {
+                    @Override
+                    public int compare(FinancialReport report1, FinancialReport report2) {
+                        return report1.getYear() - report2.getYear();
+                    }
+                });
+                
+                FinancialReport threeYearsAgoReport = financialReportsList.get(0);
+                FinancialReport twoYearsAgoReport = financialReportsList.get(1);
+                FinancialReport lastYearReport = financialReportsList.get(2);
+                
+                currentClient.setId(clientId);
+                currentClient.setThreeYearsBackReport(threeYearsAgoReport);
+                currentClient.setTwoYearsBackReport(twoYearsAgoReport);
+                currentClient.setLastYearReport(lastYearReport);
+                
+                clients.add(currentClient);
+            }
+            rs.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        
+        return clients;
     }
 }

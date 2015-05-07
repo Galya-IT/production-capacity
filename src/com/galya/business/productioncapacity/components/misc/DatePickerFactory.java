@@ -15,10 +15,13 @@ public class DatePickerFactory {
 
     public static JDatePickerImpl generateDatePickerBg() {
         UtilDateModel model = new UtilDateModel();
+        //model.setSelected(true);
+        
         Properties properties = new Properties();
         properties.put("text.today", "Today");
         properties.put("text.month", "Month");
         properties.put("text.year", "Year");
+        
         JDatePanelImpl datePanel = new JDatePanelImpl(model, properties);
         
         AbstractFormatter formatter = new AbstractFormatter() {

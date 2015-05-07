@@ -82,12 +82,12 @@ public class EconomicActivityDivisionTableHelper implements TableHelper {
             ResultSet rs = stmt.executeQuery();
 
             while (rs.next()) {
-                int databaseId = rs.getInt(EA_DIVISION_TABLE_ID);
+                long databaseId = rs.getInt(EA_DIVISION_TABLE_ID);
                 String divisionId = rs.getString(EA_DIVISION_TABLE_DIVISION_ID);
                 String divisionName = rs.getString(EA_DIVISION_TABLE_DIVISION_NAME);
                 String sectionId = rs.getString(EA_DIVISION_TABLE_SECTION_ID);
-                EconomicActivityDivision currentDivision = new EconomicActivityDivision(databaseId, divisionId, divisionName,
-                        sectionId);
+                EconomicActivityDivision currentDivision = new EconomicActivityDivision(databaseId, divisionId,
+                        divisionName, sectionId);
                 allDivisions.add(currentDivision);
             }
             rs.close();
@@ -108,11 +108,11 @@ public class EconomicActivityDivisionTableHelper implements TableHelper {
             ResultSet rs = stmt.executeQuery();
 
             while (rs.next()) {
-                int databaseId = rs.getInt(EA_DIVISION_TABLE_ID);
+                long databaseId = rs.getInt(EA_DIVISION_TABLE_ID);
                 String divisionId = rs.getString(EA_DIVISION_TABLE_DIVISION_ID);
                 String divisionName = rs.getString(EA_DIVISION_TABLE_DIVISION_NAME);
-                EconomicActivityDivision currentClass = new EconomicActivityDivision(databaseId, divisionId, divisionName,
-                        sectionId);
+                EconomicActivityDivision currentClass = new EconomicActivityDivision(databaseId, divisionId,
+                        divisionName, sectionId);
                 divisionsBySectionId.add(currentClass);
             }
             rs.close();
@@ -121,5 +121,29 @@ public class EconomicActivityDivisionTableHelper implements TableHelper {
             e.printStackTrace();
         }
         return divisionsBySectionId;
+    }
+
+    public EconomicActivityDivision getByDivisionId(String divisionId) {
+        EconomicActivityDivision division = null;
+
+        try (Connection connection = ProductionCapacityDatabaseManager.getConnection();) {
+            PreparedStatement stmt = connection.prepareStatement("SELECT * FROM " + EA_DIVISION_TABLE + " WHERE "
+                    + EA_DIVISION_TABLE_DIVISION_ID + "=?");
+            stmt.setString(1, divisionId);
+
+            ResultSet rs = stmt.executeQuery();
+
+            boolean isAnyResult = rs.next();
+            if (isAnyResult) {
+                division = new EconomicActivityDivision(rs.getLong(EA_DIVISION_TABLE_ID), divisionId, rs.getString(EA_DIVISION_TABLE_DIVISION_NAME), rs.getString(EA_DIVISION_TABLE_SECTION_ID));
+            }
+
+            rs.close();
+            stmt.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return division;
     }
 }
